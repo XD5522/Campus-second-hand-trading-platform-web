@@ -6,7 +6,7 @@
             :ellipsis="false"
             @select="handleSelect"
     >
-        <el-menu-item index="/">LOGO</el-menu-item>
+        <el-menu-item index="/about">LOGO</el-menu-item>
         <div class="flex-grow"/>
         <el-menu-item index="/about">首页</el-menu-item>
         <el-menu-item index="/about">哈哈哈</el-menu-item>
@@ -31,9 +31,6 @@ export default {
 </script>
 
 <style scoped>
-.menu-container {
-    height: 80px;
-}
 
 el-menu {
     height: 100%;
