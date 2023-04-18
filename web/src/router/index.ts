@@ -22,10 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       hideNavbar: true //隐藏导航栏
     }
+  },
+  {//管理员主界面
+    path: '/AdminMain',
+    name : 'AdminMain',
+    component: () => import('../views/AdminMain.vue')
   }
-
-
-
 ]
 
 const router = createRouter({

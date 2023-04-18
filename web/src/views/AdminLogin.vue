@@ -20,8 +20,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import md5 from 'md5';
+import {defineComponent, reactive} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElCard } from 'element-plus';
+import { LoginData } from '@/type/login';
+import {login} from "@/api/adminlogin";
+import router from "@/router";
 
 interface Form {
     username: string;
@@ -56,14 +60,27 @@ export default defineComponent({
     methods: {
         handleLogin() {
             (this.$refs.loginForm as any).validate((valid: any) => {
-                if (valid) {
-                    // 发送登录请求
-                    console.log(this.form.username);
-                    console.log(this.form.password);
-                    console.log('登录成功');
-                } else {
-                    console.log('登录失败');
-                    return false;
+                if(valid){//输入框不能为空
+                    //加密密码
+                    this.form.password = md5(this.form.password);
+                    //将待提交表单封装进data
+                    const data = reactive(new LoginData());
+                    data.ruleForm.username=this.form.username;
+                    data.ruleForm.password=this.form.password;
+                    //调用@api/login登陆
+                    login(data.ruleForm).then((res)=>{
+                        console.log(res);
+
+                        //TODO 这里需要判断登陆是否成功,router的跳转功能也仍存在问题
+
+                        //登陆成功后需要保存token,并跳转
+                        localStorage.setItem("token",res.data.token)//保存token
+                        router.push('/AdminMain')
+                    })
+                    console.log("登陆成功");
+                }
+                else{
+                    alert("登陆失败");
                 }
             });
         }
