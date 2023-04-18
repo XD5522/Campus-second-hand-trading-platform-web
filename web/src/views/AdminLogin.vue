@@ -23,7 +23,6 @@
 import md5 from 'md5';
 import {defineComponent, reactive} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElCard } from 'element-plus';
-import { LoginData } from '@/type/login';
 import {login} from "@/api/adminlogin";
 import router from "@/router";
 
@@ -64,18 +63,20 @@ export default defineComponent({
                     //加密密码
                     const md5password = md5(this.form.password);
                     //将待提交表单封装进data
-                    const data = reactive(new LoginData());
-                    data.ruleForm.username=this.form.username;
-                    data.ruleForm.password=md5password;
+                    const data = {
+                        username : this.form.username,
+                        password : md5password
+                    }
+                    console.log(data);
+
                     //调用@api/login登陆
-                    console.log(data.ruleForm);
-                    login(data.ruleForm).then((res)=>{
+                    login(data).then((res)=>{
                         console.log(res);
 
-                        //TODO 这里需要判断登陆是否成功,router的跳转功能也仍存在问题
+                        //TODO 这里需要判断登陆是否成功
 
                         //登陆成功后需要保存token,并跳转
-                        localStorage.setItem("token",res.data.token)//保存token
+                        //localStorage.setItem("token",res.data.token)//保存token
                         router.push('/AdminMain')
 
                     })

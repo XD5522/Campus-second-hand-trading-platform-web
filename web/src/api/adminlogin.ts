@@ -13,6 +13,6 @@ export function login(data:loginData){
     return request({
         url:'/login',
         method:'post',
-        data
+        data:data
     })
 }
