@@ -1,10 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+    <div class="menu-container">
+        <el-header v-if="showNavbar">
+            <navbar></navbar>
+        </el-header>
+    </div>
+    <router-view/>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import Navbar from '@/components/Navbar.vue'
+
+export default defineComponent({
+    components: {
+        Navbar // 注册导航栏组件
+    },
+    data() {
+        return {
+            showNavbar: true // showNavbar属性标记导航栏的可见性
+        }
+    },
+    watch: {
+        $route(newRoute, oldRoute) {
+            // 监听 $route 对象的变化
+            const hideNavbar = newRoute.meta.hideNavbar // 获取当前路由的 meta 字段中的 hideNavbar 属性值
+            this.showNavbar = !hideNavbar // 设置 showNavbar 的值，根据 hideNavbar 的值决定是否显示导航栏
+        }
+    }
+})
+</script>
 
 <style>
 #app {
