@@ -62,12 +62,13 @@ export default defineComponent({
             (this.$refs.loginForm as any).validate((valid: any) => {
                 if(valid){//输入框不能为空
                     //加密密码
-                    this.form.password = md5(this.form.password);
+                    const md5password = md5(this.form.password);
                     //将待提交表单封装进data
                     const data = reactive(new LoginData());
                     data.ruleForm.username=this.form.username;
-                    data.ruleForm.password=this.form.password;
+                    data.ruleForm.password=md5password;
                     //调用@api/login登陆
+                    console.log(data.ruleForm);
                     login(data.ruleForm).then((res)=>{
                         console.log(res);
 
@@ -76,6 +77,7 @@ export default defineComponent({
                         //登陆成功后需要保存token,并跳转
                         localStorage.setItem("token",res.data.token)//保存token
                         router.push('/AdminMain')
+
                     })
                     console.log("登陆成功");
                 }
