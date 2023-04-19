@@ -23,7 +23,7 @@ request.interceptors.response.use((res)=>{
     }
     return res.data
 },(error)=>{
-    console.log(error)
+    console.log("后端返回错误信息    "+error)
 })
 
 export default request
