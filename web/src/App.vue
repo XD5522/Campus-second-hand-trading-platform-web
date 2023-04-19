@@ -2,6 +2,7 @@
     <div class="menu-container">
         <el-header v-if="showNavbar">
             <navbar></navbar>
+            <router-link to="AdminMain">111</router-link>
         </el-header>
     </div>
     <router-view/>

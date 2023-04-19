@@ -7,7 +7,7 @@ export interface LoginForm {
  *  定义登陆方法使用的data
  */
 export class LoginData {
-    ruleForm: LoginForm = {
+    data = {
         username: "",
         password: ""
     }

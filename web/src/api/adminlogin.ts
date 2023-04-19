@@ -9,10 +9,10 @@ interface loginData{
  * 管理员页面的登陆方法
  * @param data
  */
-export function login(data:loginData){
+export function login(data: loginData) {
     return request({
-        url:'/login',
-        method:'post',
-        data
-    })
+        url: '/admin',
+        method: 'post',
+        data: data // 传入登录数据
+    });
 }

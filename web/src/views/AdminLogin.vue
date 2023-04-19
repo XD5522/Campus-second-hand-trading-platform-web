@@ -64,18 +64,15 @@ export default defineComponent({
                     //加密密码
                     this.form.password = md5(this.form.password);
                     //将待提交表单封装进data
-                    const data = reactive(new LoginData());
-                    data.ruleForm.username=this.form.username;
-                    data.ruleForm.password=this.form.password;
+
                     //调用@api/login登陆
-                    login(data.ruleForm).then((res)=>{
-                        console.log(res);
-
-                        //TODO 这里需要判断登陆是否成功,router的跳转功能也仍存在问题
-
-                        //登陆成功后需要保存token,并跳转
-                        localStorage.setItem("token",res.data.token)//保存token
-                        router.push('/AdminMain')
+                    console.log(this.form)
+                  const data = { // 假设 `loginData` 是一个包含 `username` 和 `password` 字段的对象
+                    username: '111',
+                    password: '222'
+                  };
+                    login(data).then((res)=>{
+                      router.push('/AdminMain')
                     })
                     console.log("登陆成功");
                 }

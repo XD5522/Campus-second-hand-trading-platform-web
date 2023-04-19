@@ -5,6 +5,7 @@
             mode="horizontal"
             :ellipsis="false"
             @select="handleSelect"
+            router="true"
     >
         <el-menu-item index="/about">LOGO</el-menu-item>
         <div class="flex-grow"/>
