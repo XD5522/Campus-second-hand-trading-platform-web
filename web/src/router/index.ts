@@ -31,7 +31,10 @@ const routes: Array<RouteRecordRaw> = [
   {//功能测试页面
     path: '/test',
     name: 'test',
-    component: () => import('../views/test.vue')
+    component: () => import('../views/test.vue'),
+    meta: {
+      hideNavbar: true //隐藏导航栏
+    }
   }
 ]
 

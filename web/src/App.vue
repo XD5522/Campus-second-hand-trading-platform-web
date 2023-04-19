@@ -39,10 +39,6 @@ export default defineComponent({
   color: #2c3e50;
 }
 
-.menu-container {
-    height: 80px;
-}
-
 nav {
   padding: 30px;
 }
