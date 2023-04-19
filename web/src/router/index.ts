@@ -27,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/AdminMain',
     name : 'AdminMain',
     component: () => import('../views/AdminMain.vue')
+  },
+  {//功能测试页面
+    path: '/test',
+    name: 'test',
+    component: () => import('../views/test.vue')
   }
 ]
 
