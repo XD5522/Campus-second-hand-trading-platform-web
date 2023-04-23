@@ -5,14 +5,14 @@
             <div class="modal">
                 <h2>{{ title }}</h2>
                 <p>{{ message }}</p>
-                <button @click="closeModal">关闭模态框</button>
+                <button @click="closeModal">关闭</button>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType, defineProps, defineEmits } from 'vue'
+import { PropType, defineProps, defineEmits, ref } from 'vue'
 
 interface Props {
     title: string,
@@ -33,12 +33,21 @@ const props = defineProps({
     }
 })
 
+//获取父组件中传递的值
+const titleRef = ref(props.title);
+const messageRef = ref(props.message);
+//console.log(messageRef);
+
 const emits = defineEmits(['update:visible'])
 
 const closeModal = () => {
     emits('update:visible', false)
 }
 
+/**
+ * 把props和closeModal暴露给父组件,允许父组件修改它的值
+ * 父组件通过在模态框组件上监听 update:visible 事件，当模态框需要关闭时，触发 update:visible 事件，从而调用模态框组件中暴露出来的 closeModal 函数来关闭模态框。
+ */
 defineExpose({
     props,
     closeModal,
@@ -63,5 +72,7 @@ defineExpose({
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    width: 800px;
+    height: 500px;
 }
 </style>
