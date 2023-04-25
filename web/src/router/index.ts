@@ -35,6 +35,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       hideNavbar: true //隐藏导航栏
     }
+  },
+  {//用户登陆界面
+    path: '/userlogin',
+    name: 'userlogin',
+    component:()=> import('../views/UserLogin.vue'),
+    meta: {
+      hideNavbar: true
+    }
   }
 ]
 
