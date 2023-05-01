@@ -37,20 +37,25 @@
             <el-col :span="1"></el-col>
             <el-col :span="22">
                 <div class="content-box">
-                    <el-row :gutter="20">
-                        <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="(commodity, index) in commodityList" :key="index">
-                            <el-card shadow="hover">
-                                <img :src="commodity.imageurl" class="image" />
-                                <div style="padding: 14px;">
-                                    <div class="text-item">{{ commodity.name }}</div>
-                                    <div class="text-item">销量：{{ commodity.sales }}</div>
-                                    <div class="text-item">库存：{{ commodity.stock }}</div>
-                                    <div class="text-item">评价分数：{{ commodity.score }}</div>
-                                    <div class="text-item">价格：{{ commodity.price }}元</div>
-                                </div>
-                            </el-card>
-                        </el-col>
-                    </el-row>
+                    <div class="content-box-botton">
+                        <el-button v-if="IsSelf">添加商品</el-button>
+                    </div>
+                    <div class="content-box-table">
+                        <el-row :gutter="10">
+                            <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="(commodity, index) in commodityList" :key="index" style="margin-bottom:10px">
+                                <el-card shadow="hover" class="content-box-table-card">
+                                    <el-image :src="commodity.imageurl"/>
+                                    <div style="padding: 14px;">
+                                        <div class="text-item">{{ commodity.name }}</div>
+                                        <div class="text-item">销量：{{ commodity.sales }}</div>
+                                        <div class="text-item">库存：{{ commodity.stock }}</div>
+                                        <div class="text-item">评价分数：{{ commodity.score }}</div>
+                                        <div class="text-item">价格：{{ commodity.price }}元</div>
+                                    </div>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </div>
             </el-col>
         </el-main>
@@ -72,13 +77,19 @@ let IsSelf = ref(true);//判断是否是本人访问
 
 onMounted(() => {
     IsWho()
+    GetCommodityList()
 })
+
+/**
+ * 判断是否是本人在访问
+ * @constructor
+ */
 function IsWho(){
     //TODO 判断是不是用户本人在访问
     //IsSelf = ref(false);
 }
 
-//测试用的商品列表
+//定义商品信息
 interface Commodity {
     imageurl: string;
     name: string;
@@ -87,16 +98,24 @@ interface Commodity {
     score: number;
     price: number;
 }
-
-const commodityList: Commodity[] = [
-    { imageurl: "https://picsum.photos/200/300",name: '商品1', sales: 100, stock: 200, score: 4.5, price: 100 },
-    { imageurl: "https://picsum.photos/200/300",name: '商品2', sales: 200, stock: 100, score: 4.2, price: 200 },
-    { imageurl: "https://picsum.photos/200/300",name: '商品3', sales: 300, stock: 50, score: 4.8, price: 300 },
-    { imageurl: "https://picsum.photos/200/300",name: '商品4', sales: 400, stock: 80, score: 4.3, price: 400 },
-    { imageurl: "https://picsum.photos/200/300",name: '商品5', sales: 500, stock: 150, score: 4.6, price: 500 },
+//测试用的商品列表
+let commodityList: Commodity[] = [
+    { imageurl: "https://picsum.photos/200/200",name: '商品1', sales: 100, stock: 200, score: 4.5, price: 100 },
+    { imageurl: "https://picsum.photos/200/200",name: '商品2', sales: 200, stock: 100, score: 4.2, price: 200 },
+    { imageurl: "https://picsum.photos/200/200",name: '商品3', sales: 300, stock: 50, score: 4.8, price: 300 },
+    { imageurl: "https://picsum.photos/200/200",name: '商品4', sales: 400, stock: 80, score: 4.3, price: 400 },
+    { imageurl: "https://picsum.photos/200/200",name: '商品5', sales: 500, stock: 150, score: 4.6, price: 500 },
 ];
 
-
+/**
+ * 获取商品列表
+ * @constructor
+ */
+function GetCommodityList(){
+    //TODO 商品列表的获取
+}
+//TODO 新增商品的按钮
+//TODO 模态框
 </script>
 
 <style scoped>
@@ -154,13 +173,27 @@ const commodityList: Commodity[] = [
 }
 .main {
     padding: 0px;
-    //flex: 1;
     display: flex;
+    overflow: hidden;
 }
 .content-box {
-    padding-top: 20px;
+    position: relative;
     background-color: white;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.content-box-botton{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    flex-grow: 1
+}
+.content-box-table{
+    flex-grow: 1
+}
+.content-box-table-card{
 
 }
+
 </style>
