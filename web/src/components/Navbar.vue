@@ -1,5 +1,4 @@
 <template>
-<!--TODO 这导航栏怎么和页面不等宽啊-->
     <el-menu
             :default-active="activeIndex"
             class="el-menu-demo"
