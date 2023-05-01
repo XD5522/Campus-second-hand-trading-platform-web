@@ -43,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       hideNavbar: true
     }
+  },
+  {//用户个人中心
+    path: '/userzone',
+    name: 'userzone',
+    component:()=> import('../views/User_Zone.vue')
   }
 ]
 
