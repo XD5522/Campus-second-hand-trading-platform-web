@@ -34,7 +34,7 @@ export default defineComponent({
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    background-color: rgba(255,251,0,0.22);
+    background-color: rgba(0, 255, 255, 0.06);
     color: #2c3e50;
 }
 nav {
