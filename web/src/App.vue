@@ -1,9 +1,7 @@
 <template>
-    <div class="menu-container">
-        <el-header v-if="showNavbar">
-            <navbar></navbar>
-        </el-header>
-    </div>
+    <el-header v-if="showNavbar" style="padding: 0px;">
+        <navbar></navbar>
+    </el-header>
     <router-view/>
 </template>
 
@@ -31,10 +29,6 @@ export default defineComponent({
 </script>
 
 <style>
-navbar{
-    display: flex;
-    width: 100%;
-}
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -43,7 +37,6 @@ navbar{
     background-color: rgba(255,251,0,0.22);
     color: #2c3e50;
 }
-
 nav {
   padding: 30px;
 }
