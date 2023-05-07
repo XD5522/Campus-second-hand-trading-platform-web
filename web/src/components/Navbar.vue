@@ -21,8 +21,9 @@
 <!--TODO 这里要能获取用户的用户名-->
             <template #title>用户名</template>
             <el-menu-item index="/userzone">个人中心</el-menu-item>
-            <el-menu-item index="2-2">购物车</el-menu-item>
-            <el-menu-item index="2-3">注销</el-menu-item>
+            <el-menu-item index="/userhistory">历史订单</el-menu-item>
+            <el-menu-item index="2-3">购物车</el-menu-item>
+            <el-menu-item index="2-4">注销</el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>

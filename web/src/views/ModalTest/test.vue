@@ -2,7 +2,7 @@
 
 <template>
     <div>
-        <el-button @click="visible = true">打开模态框</el-button>
+        <el-button @click="openmodal()">打开模态框</el-button>
 
         <modal :visible="visible"
                :title="title"
@@ -15,11 +15,16 @@
 
 <script lang="ts" setup>
 import { defineComponent, ref } from 'vue'
-import Modal from '@/components/ChildComponentTest.vue'
+import Modal from '@/views/ModalTest/components/ChildComponentTest.vue'
 
 const visible = ref(false)
 const title = ref('标题')
 const message = ref('这是一个模态框')
+
+function openmodal(){
+    console.log(visible.value)
+    visible.value=true;
+}
 
 
 defineComponent({

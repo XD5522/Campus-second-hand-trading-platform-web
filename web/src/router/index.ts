@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
   {//功能测试页面
     path: '/test',
     name: 'test',
-    component: () => import('../views/test.vue'),
+    component: () => import('../views/ModalTest/test.vue'),
     meta: {
       hideNavbar: true //隐藏导航栏
     }
@@ -47,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
   {//用户个人中心
     path: '/userzone',
     name: 'userzone',
-    component:()=> import('../views/User_Zone.vue')
+    component:()=> import('../views/User_Zone/User_Zone.vue')
   },
   {
     path: '/search',
@@ -56,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       hideNavbar: true
     }
+  },
+  {//用户历史订单页面
+    path: '/userhistory',
+    name: 'userhistory',
+    component:()=>import('../views/User_History/User_History.vue')
   }
 ]
 

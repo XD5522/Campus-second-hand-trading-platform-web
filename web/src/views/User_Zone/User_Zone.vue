@@ -38,19 +38,20 @@
             <el-col :span="22">
                 <div class="content-box">
                     <div class="content-box-botton">
-                        <el-button v-if="IsSelf">添加商品</el-button>
+                        <el-button v-if="IsSelf" @click="AddNewproduct()">添加商品</el-button>
                     </div>
                     <div class="content-box-table">
                         <el-row :gutter="10">
-                            <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="(commodity, index) in commodityList" :key="index" style="margin-bottom:10px">
+                            <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="(product, index) in ProductList" :key="index" style="margin-bottom:10px">
                                 <el-card shadow="hover" class="content-box-table-card">
-                                    <el-image :src="commodity.imageurl"/>
+                                    <el-image :src="product.imageurl"/>
                                     <div style="padding: 14px;">
-                                        <div class="text-item">{{ commodity.name }}</div>
-                                        <div class="text-item">销量：{{ commodity.sales }}</div>
-                                        <div class="text-item">库存：{{ commodity.stock }}</div>
-                                        <div class="text-item">评价分数：{{ commodity.score }}</div>
-                                        <div class="text-item">价格：{{ commodity.price }}元</div>
+                                        <div class="text-item">{{ product.name }}</div>
+                                        <div class="text-item">销量：{{ product.sales }}</div>
+                                        <div class="text-item">库存：{{ product.stock }}</div>
+                                        <div class="text-item">评价分数：{{ product.score }}</div>
+                                        <div class="text-item">价格：{{ product.price }}元</div>
+                                        <el-button v-if="IsSelf">下架商品</el-button>
                                     </div>
                                 </el-card>
                             </el-col>
@@ -58,16 +59,19 @@
                     </div>
                 </div>
             </el-col>
+            <modal :visible="visible"
+                   :product_form="product_form"
+                   @update:visible="visible = $event" />
+            <!--@update:visible="visible = $event"来监视组件中的'update:visible'事件,当事件发生时修改visible属性的值-->
         </el-main>
     </el-container>
 </template>
 
 <script lang="ts" setup>
 import {defineComponent,ref,onMounted} from 'vue';
+import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
 
-defineComponent({
-    name: 'MyLayout',
-});
+
 //用户基本信息
 let imgurl="";
 let username="NULL";//用户名
@@ -77,7 +81,7 @@ let IsSelf = ref(true);//判断是否是本人访问
 
 onMounted(() => {
     IsWho()
-    GetCommodityList()
+    GetProductList()
 })
 
 /**
@@ -90,7 +94,7 @@ function IsWho(){
 }
 
 //定义商品信息
-interface Commodity {
+interface product {
     imageurl: string;
     name: string;
     sales: number;
@@ -99,7 +103,7 @@ interface Commodity {
     price: number;
 }
 //测试用的商品列表
-let commodityList: Commodity[] = [
+let ProductList: product[] = [
     { imageurl: "https://picsum.photos/200/200",name: '商品1', sales: 100, stock: 200, score: 4.5, price: 100 },
     { imageurl: "https://picsum.photos/200/200",name: '商品2', sales: 200, stock: 100, score: 4.2, price: 200 },
     { imageurl: "https://picsum.photos/200/200",name: '商品3', sales: 300, stock: 50, score: 4.8, price: 300 },
@@ -111,11 +115,53 @@ let commodityList: Commodity[] = [
  * 获取商品列表
  * @constructor
  */
-function GetCommodityList(){
+function GetProductList(){
     //TODO 商品列表的获取
 }
 //TODO 新增商品的按钮
-//TODO 模态框
+
+const visible = ref(false)
+//定义商品表
+interface Form{
+    user_id:string,
+    product_name: string,//商品名称,不超过20个字
+    product_intro: string,//商品介绍,不超过50个字
+    product_price: number,//商品价格,不能小于等于0
+    product_stock: number,//商品库存,不能小于1
+    product_size: string,//商品尺寸,不能超过50个字
+    product_type: string,//商品类型,不能超过10个字
+}
+const product_form = ref<Form>({
+    user_id:'1',
+    product_name: '',
+    product_intro: '',
+    product_price: 0,
+    product_stock: 1,
+    product_size: '',
+    product_type: '',
+})
+
+
+function AddNewproduct(){
+    console.log(visible.value);
+    console.log(product_form.value);
+    if(!visible.value) visible.value = true;
+}
+
+
+
+//TODO 商品详情页的跳转
+//TODO 分页显示
+
+
+defineComponent({
+    components: { Modal },
+    setup() {
+        //子组件 Modal 是通过 teleport 挂载到 body 元素下的，因此它实际上是一个独立的组件，并不受父组件的包裹影响
+        //因此可以直接使用 {{title}} 来显示 title 的值，而不需要在子组件中定义。
+        return { visible, product_form }
+    }
+});
 </script>
 
 <style scoped>
@@ -139,7 +185,7 @@ function GetCommodityList(){
     //background-color: rgb(255, 255, 255);
     margin-bottom: 0px;
     overflow: hidden;
-    background-image: url("../assets/userinfo1.png");
+    background-image: url("../../assets/userinfo1.png");
 }
 .header-box-info{
     position: absolute;
