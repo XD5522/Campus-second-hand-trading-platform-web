@@ -48,6 +48,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/userzone',
     name: 'userzone',
     component:()=> import('../views/User_Zone.vue')
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component:()=> import('@/views/search/Index.vue'),
+    meta: {
+      hideNavbar: true
+    }
   }
 ]
 
