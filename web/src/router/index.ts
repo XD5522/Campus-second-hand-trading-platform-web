@@ -47,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
   {//用户个人中心
     path: '/userzone',
     name: 'userzone',
-    component:()=> import('../views/User_Zone/User_Zone.vue')
+    component:()=> import('@/views/User_Zone/User_Zone.vue')
   },
   {
     path: '/search',
@@ -57,10 +57,13 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: true
     }
   },
-  {//用户历史订单页面
-    path: '/userhistory',
-    name: 'userhistory',
-    component:()=>import('../views/User_History/User_History.vue')
+  {
+    path: '/product',
+    name: 'product',
+    component:()=> import('@/views/product/Index.vue'),
+    meta: {
+      hideNavbar: true
+    }
   }
 ]
 

@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-export function getProductById(id:String){
+export function search(name:String){
     return request({
         method:"get",
-        url: `/product?id=${id}`
+        url: `/product/search?name=${name}`
     })
 }

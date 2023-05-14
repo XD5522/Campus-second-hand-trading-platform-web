@@ -1,3 +1,4 @@
+
 export interface product{
     id: number;
     userId: number;
@@ -13,4 +14,5 @@ export interface product{
     trading: String;
     state: String;
     imagePath: String;
+
 }
