@@ -11,7 +11,7 @@ interface loginData{
  */
 export function login(data: loginData) {
     return request({
-        url: '/',//TODO 完善普通用户登陆方法
+        url: '/',
         method: 'post',
         data: data // 传入登录数据
     });

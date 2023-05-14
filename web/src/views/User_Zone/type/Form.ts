@@ -1,5 +1,4 @@
-import request from "@/api/request";
-interface Form {
+export interface Form {
     user_id: string,
     product_name: string,//商品名称,不超过20个字
     product_intro: string,//商品介绍,不超过50个字
@@ -7,12 +6,4 @@ interface Form {
     product_stock: number,//商品库存,不能小于1
     product_size: string,//商品尺寸,不能超过50个字
     product_type: string,//商品类型,不能超过10个字
-}
-
-export function AddNewProduct(data: Form) {
-    return request({
-        url: '/user/AddNewProduct',
-        method: 'post',
-        data: data // 传入登录数据
-    });
 }

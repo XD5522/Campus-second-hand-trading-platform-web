@@ -56,15 +56,6 @@ const props = defineProps({
 
 //获取父组件中传递的值
 const product_form = ref<Form>(props.product_form);
-interface Form{
-    user_id:string,
-    product_name: string,//商品名称,不超过20个字
-    product_intro: string,//商品介绍,不超过50个字
-    product_price: number,//商品价格,不能小于等于0
-    product_stock: number,//商品库存,不能小于1
-    product_size: string,//商品尺寸,不能超过50个字
-    product_type: string,//商品类型,不能超过10个字
-}
 const rules = {
     product_name: [
         { required: true, message: '商品名称不能为空', trigger: 'blur' },
@@ -94,19 +85,7 @@ const rules = {
     ]
 }
 function submitForm(this: any){
-    //子组件的$refs调用问题,似乎和生命周期有关
-    // this.$refs.modal.$refs.validate((valid: any) => {
-    //     if (valid) {
-    //         console.log("yes")
-    //         // 表单验证成功，执行表单提交操作
-    //         // 这里可以通过调用接口提交表单数据
-    //     } else {
-    //         // 表单验证失败，提示错误信息
-    //         console.log("WA")
-    //         return false;
-    //     }
-    // });
-
+    emits('AddProduct');
 }
 
 
