@@ -63,24 +63,24 @@
 
             <el-form style="display: none;" :model="product_form" :rules="rules" ref="formRef">
                 <el-form-item label="商品名称" prop="product_name">
-                    <el-input v-model="product_form.product_name"></el-input>
+                    <el-input v-model="product_form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="商品介绍" prop="product_intro">
-                    <el-input v-model="product_form.product_intro"></el-input>
+                    <el-input v-model="product_form.intro"></el-input>
                 </el-form-item>
                 <el-form-item label="商品价格" prop="product_price">
-                    <el-input-number v-model.number="product_form.product_price" :min="0"
+                    <el-input-number v-model.number="product_form.price" :min="0"
                                      :precision="2"></el-input-number>
                 </el-form-item>
                 <el-form-item label="商品库存" prop="product_stock">
-                    <el-input-number v-model.number="product_form.product_stock" :min="1"
+                    <el-input-number v-model.number="product_form.stock" :min="1"
                                      :precision="0"></el-input-number>
                 </el-form-item>
                 <el-form-item label="商品尺寸" prop="product_size">
-                    <el-input v-model="product_form.product_size"></el-input>
+                    <el-input v-model="product_form.size"></el-input>
                 </el-form-item>
                 <el-form-item label="商品类型" prop="product_type">
-                    <el-input v-model="product_form.product_type"></el-input>
+                    <el-input v-model="product_form.type"></el-input>
                 </el-form-item>
             </el-form>
 
@@ -98,7 +98,7 @@ import {defineComponent, ref, onMounted} from 'vue';
 import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
 import {ElButton, ElForm, ElFormItem, ElInput} from "element-plus";
 import {AddNewProduct} from "@/api/UserZone";
-import {Form} from "@/views/User_Zone/type/Form";
+import {Product} from "@/views/User_Zone/type/Product";
 
 //用户基本信息
 let imgurl = "";
@@ -121,6 +121,7 @@ function IsWho() {
     //IsSelf = ref(false);
 }
 
+//TODO 这部分全部需要适配后端
 //定义商品信息
 interface product {
     imageurl: string;
@@ -148,66 +149,67 @@ function GetProductList() {
     //TODO 商品列表的获取
 }
 
-//TODO 新增商品的按钮
 
+/*新增商品功能*/
 const visible = ref(false)
-
 //定义商品表
-
-
-const product_form = ref<Form>({
-    user_id: '1',
-    product_name: '',
-    product_intro: '',
-    product_price: 0,
-    product_stock: 1,
-    product_size: '',
-    product_type: '',
+const product_form = ref<Product>({
+    imgurl: '',
+    user_id: 1,
+    user_name: '张三',
+    name: '',
+    intro: '',
+    price: 0,
+    stock: 1,
+    his_sales: 0,
+    size: '',
+    star: 5,
+    type: '',
+    trading: '',
+    state: '审核',
+    flag: 0
 })
 const rules = {
-    product_name: [
+    name: [
         { required: true, message: '商品名称不能为空', trigger: 'blur' },
         { max: 20, message: '商品名称不能超过20个字符', trigger: 'blur' }
     ],
-    product_intro: [
+    intro: [
         { required: true, message: '商品介绍不能为空', trigger: 'blur' },
         { max: 50, message: '商品介绍不能超过50个字符', trigger: 'blur' }
     ],
-    product_price: [
+    price: [
         { required: true, message: '商品价格不能为空', trigger: 'blur' },
         { type: 'number', message: '商品价格必须是数字', trigger: 'blur' },
         { validator: (rule, value) => value > 0, message: '商品价格必须大于0', trigger: 'blur' }
     ],
-    product_stock: [
+    stock: [
         { required: true, message: '商品库存不能为空', trigger: 'blur' },
         { type: 'number', message: '商品库存必须是数字', trigger: 'blur' },
         { validator: (rule, value) => value > 1, message: '商品库存必须大于1', trigger: 'blur' }
     ],
-    product_size: [
+    size: [
         { required: true, message: '商品尺寸不能为空', trigger: 'blur' },
         { max: 50, message: '商品尺寸不能超过50个字符', trigger: 'blur' }
     ],
-    product_type: [
+    type: [
         { required: true, message: '商品类型不能为空', trigger: 'blur' },
         { max: 10, message: '商品类型不能超过10个字符', trigger: 'blur' }
     ]
 }
 
-//显示修改表单的子组件
+//显示新增商品的子组件
 function Show_AddNewProductForm() {
     if (!visible.value) visible.value = true;
 }
 
 function SubmitNewProduct() {
-    //console.log(product_form)
     AddNewProduct(product_form.value);
 }
 
 
 //TODO 商品详情页的跳转
 //TODO 分页显示
-
-
 defineComponent({
     components: {Modal},
     setup() {
