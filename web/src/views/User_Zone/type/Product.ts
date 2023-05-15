@@ -8,7 +8,7 @@ export interface Product {
     stock: number,      //商品库存,不能小于1
     his_sales: number,  //商品历史销量
     size: string,       //商品尺寸,不能超过50个字
-    star: number,       //历史评价
+    star: number,       //商品评分
     type: string,       //商品类型,不能超过10个字
     trading: string,    //交易方式
     state: string,      //商品状态(审核、正常、封禁)

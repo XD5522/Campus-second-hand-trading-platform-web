@@ -24,8 +24,8 @@
                     </el-form-item>
                     <el-form-item label="交易方式" prop="product_">
                         <el-select v-model="product_form.trading" placeholder="选择交易方式">
-                            <el-option label="快递运输" :value="option1"></el-option>
-                            <el-option label="线下交易" :value="option2"></el-option>
+                            <el-option label="商家包邮" :value="option1"></el-option>
+                            <el-option label="自付运费" :value="option2"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
@@ -59,8 +59,8 @@ const props = defineProps({
 //获取父组件中传递的值
 const product_form = ref<Product>(props.product_form);
 //定义el-select中使用的option
-const option1 = ref("快递运输");
-const option2 = ref("线下交易");
+const option1 = ref("商家包邮");
+const option2 = ref("自付运费");
 const rule = {
     name: [
         { required: true, message: '商品名称不能为空', trigger: 'blur' },
