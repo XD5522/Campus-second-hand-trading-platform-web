@@ -166,7 +166,7 @@ const product_form = ref<Product>({
     star: 5,
     type: '',
     trading: '',
-    state: '审核',
+    state: 'audit',
     flag: 0
 })
 const rules = {

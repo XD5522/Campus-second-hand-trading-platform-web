@@ -64,6 +64,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       hideNavbar: true
     }
+  },
+  {
+    path: '/userhistory',
+    name: 'userhistory',
+    component:()=> import('../views/User_History/User_History.vue')
   }
 ]
 
