@@ -3,24 +3,30 @@
         <!-- 显示模态框 -->
         <div v-if="visible" class="modal-overlay">
             <div class="modal">
-                <el-form :model="product_form" :rules="rules" ref="formRef" >
+                <el-form :model="product_form" :rules="rule" ref="formRef">
                     <el-form-item label="商品名称" prop="product_name">
-                        <el-input v-model="product_form.product_name"></el-input>
+                        <el-input v-model="product_form.name"></el-input>
                     </el-form-item>
                     <el-form-item label="商品介绍" prop="product_intro">
-                        <el-input v-model="product_form.product_intro"></el-input>
+                        <el-input v-model="product_form.intro"></el-input>
                     </el-form-item>
                     <el-form-item label="商品价格" prop="product_price">
-                        <el-input-number v-model.number="product_form.product_price" :min="0" :precision="2"></el-input-number>
+                        <el-input-number v-model.number="product_form.price" :min="1" :precision="2"></el-input-number>
                     </el-form-item>
                     <el-form-item label="商品库存" prop="product_stock">
-                        <el-input-number v-model.number="product_form.product_stock" :min="1" :precision="0"></el-input-number>
+                        <el-input-number v-model.number="product_form.stock" :min="1" :precision="0"></el-input-number>
                     </el-form-item>
                     <el-form-item label="商品尺寸" prop="product_size">
-                        <el-input v-model="product_form.product_size"></el-input>
+                        <el-input v-model="product_form.size"></el-input>
                     </el-form-item>
                     <el-form-item label="商品类型" prop="product_type">
-                        <el-input v-model="product_form.product_type"></el-input>
+                        <el-input v-model="product_form.type"></el-input>
+                    </el-form-item>
+                    <el-form-item label="交易方式" prop="product_">
+                        <el-select v-model="product_form.trading" placeholder="选择交易方式">
+                            <el-option label="商家包邮" :value="option1"></el-option>
+                            <el-option label="自付运费" :value="option2"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm()">提交</el-button>
@@ -36,9 +42,7 @@
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from 'vue'
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
-import md5 from "md5";
-import {login} from "@/api/adminlogin";
-import router from "@/router";
+import {Product} from "@/views/User_Zone/type/Product";
 //TODO 商品图片上传
 
 const props = defineProps({
@@ -47,70 +51,47 @@ const props = defineProps({
         required: true,
     },
     product_form: {
-        type: Object as PropType<Form>,
+        type: Object as PropType<Product>,
         required: true
     }
 })
 
-
-
 //获取父组件中传递的值
-const product_form = ref<Form>(props.product_form);
-interface Form{
-    user_id:string,
-    product_name: string,//商品名称,不超过20个字
-    product_intro: string,//商品介绍,不超过50个字
-    product_price: number,//商品价格,不能小于等于0
-    product_stock: number,//商品库存,不能小于1
-    product_size: string,//商品尺寸,不能超过50个字
-    product_type: string,//商品类型,不能超过10个字
-}
-const rules = {
-    product_name: [
+const product_form = ref<Product>(props.product_form);
+//定义el-select中使用的option
+const option1 = ref("商家包邮");
+const option2 = ref("自付运费");
+const rule = {
+    name: [
         { required: true, message: '商品名称不能为空', trigger: 'blur' },
         { max: 20, message: '商品名称不能超过20个字符', trigger: 'blur' }
     ],
-    product_intro: [
+    intro: [
         { required: true, message: '商品介绍不能为空', trigger: 'blur' },
         { max: 50, message: '商品介绍不能超过50个字符', trigger: 'blur' }
     ],
-    product_price: [
+    price: [
         { required: true, message: '商品价格不能为空', trigger: 'blur' },
         { type: 'number', message: '商品价格必须是数字', trigger: 'blur' },
         { validator: (rule, value) => value > 0, message: '商品价格必须大于0', trigger: 'blur' }
     ],
-    product_stock: [
+    stock: [
         { required: true, message: '商品库存不能为空', trigger: 'blur' },
         { type: 'number', message: '商品库存必须是数字', trigger: 'blur' },
         { validator: (rule, value) => value > 1, message: '商品库存必须大于1', trigger: 'blur' }
     ],
-    product_size: [
+    size: [
         { required: true, message: '商品尺寸不能为空', trigger: 'blur' },
         { max: 50, message: '商品尺寸不能超过50个字符', trigger: 'blur' }
     ],
-    product_type: [
+    type: [
         { required: true, message: '商品类型不能为空', trigger: 'blur' },
         { max: 10, message: '商品类型不能超过10个字符', trigger: 'blur' }
     ]
 }
 function submitForm(this: any){
-    //子组件的$refs调用问题,似乎和生命周期有关
-    // this.$refs.modal.$refs.validate((valid: any) => {
-    //     if (valid) {
-    //         console.log("yes")
-    //         // 表单验证成功，执行表单提交操作
-    //         // 这里可以通过调用接口提交表单数据
-    //     } else {
-    //         // 表单验证失败，提示错误信息
-    //         console.log("WA")
-    //         return false;
-    //     }
-    // });
-
+    emits('AddProduct');
 }
-
-
-
 
 
 
