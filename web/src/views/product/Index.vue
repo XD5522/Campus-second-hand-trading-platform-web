@@ -7,17 +7,19 @@ import  { product } from "@/views/product/type/Product";
 
 import {getProductById} from "@/api/product";
 import router from "@/router";
+import * as buffer from "buffer";
 
 const product = ref<product>();
 const images = ref<String>();
 const route = useRoute()
+const divRef = ref(null);
 
 function getProduct(){
     let id = String(route.query.id);
     console.log(id)
     getProductById(id).then(res=>{
         product.value = res.data
-        console.log(res)
+        console.log(product.value)
     }).catch(err=>{
         console.log("err"+err)
     })
@@ -27,62 +29,33 @@ onBeforeMount(()=>{
     getProduct()
 })
 
+
+const url = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+const fit = 'contain'
 </script>
 
 <template>
-    <div>
-            <div slot="header" class="clearfix">
-                <span>{{ product.name }}</span>
+    <el-container>
+        <el-main>
+            <div class = "block">
+                <el-image style="width: 200px; height: 200px" :src="url" :fit="fit" />
             </div>
-            <div>
-                <el-row>
-                    <el-col :span="6">商品ID:</el-col>
-                    <el-col :span="18">{{ product.id }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">商品介绍:</el-col>
-                    <el-col :span="18">{{ product.intro }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">价格:</el-col>
-                    <el-col :span="18">{{ product.price }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">尺寸:</el-col>
-                    <el-col :span="18">{{ product.size }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">评分:</el-col>
-                    <el-col :span="18">{{ product.star }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">状态:</el-col>
-                    <el-col :span="18">{{ product.state }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">库存:</el-col>
-                    <el-col :span="18">{{ product.stock }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">交易方式:</el-col>
-                    <el-col :span="18">{{ product.trading }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">类型:</el-col>
-                    <el-col :span="18">{{ product.type }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">卖家ID:</el-col>
-                    <el-col :span="18">{{ product.userId }}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">卖家用户名:</el-col>
-                    <el-col :span="18">{{ product.userName }}</el-col>
-                </el-row>
+            <div class = "pro_name">
+                <p></p>
             </div>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 
 <style scoped>
-
+.block{
+    float: left;
+}
+.pro_name{
+    font: 700 16px Arial,"microsoft yahei";
+    color: #666;
+    padding-top: 10px;
+    line-height: 28px;
+    margin-bottom: 5px;
+}
 </style>

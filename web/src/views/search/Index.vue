@@ -6,21 +6,21 @@
     </div>
     <div class="search-product">
         <el-table :data="products" border style="width: 100%" >
-            <el-table-column prop="name" label="商品名" width="180">
+            <el-table-column prop="name" label="商品名">
                 <template #default="{row}">
                     <el-button @click=push(row.id)>{{ row.name }}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="userName" label="商家" width="180" />
-            <el-table-column label="图片" width="180">
+            <el-table-column prop="userName" label="商家"/>
+            <el-table-column label="图片">
                 <template #default="{row}">
                     <img :src="row.imagePath" alt="图片" >
                 </template>
             </el-table-column>
-            <el-table-column prop="price" label="价格" width="180"/>
-            <el-table-column prop="stock" label="库存" width="180"/>
-            <el-table-column prop="hisSales" label="历史销量" width="180"/>
-            <el-table-column prop="star" label="评分" width="180"/>
+            <el-table-column prop="price" label="价格"/>
+            <el-table-column prop="stock" label="库存"/>
+            <el-table-column prop="hisSales" label="历史销量" />
+            <el-table-column prop="star" label="评分" min-width="180"/>
         </el-table>
     </div>
 
@@ -62,6 +62,8 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+
+
 .search-page {
     display: flex;
     align-items: center;
