@@ -19,9 +19,9 @@ request.interceptors.request.use((config)=>{
 request.interceptors.response.use((res)=>{
     const code:number = res.status
     if(code != 200){
-        return Promise.reject(res)
+        return Promise.reject(res.data)
     }
-    return res
+    return res.data
 },(error)=>{
     console.log("后端返回错误信息    "+error)
 })
