@@ -5,8 +5,9 @@
             <el-col :span="22">
                 <div class="header-botton">
                     <div style="flex: 1;"></div>
-                    <el-button type="primary">查看已完成</el-button>
-                    <el-button type="primary">查看未完成</el-button>
+                    <el-button type="primary" @click="ListAll">查看所有</el-button>
+                    <el-button type="primary" @click="Listfinish">查看已完成</el-button>
+                    <el-button type="primary" @click="ListUnfinished">查看未完成</el-button>
                 </div>
             </el-col>
         </el-header>
@@ -21,21 +22,25 @@
                           @row-click="handleRowClick"
                 >
                     <el-table-column v-if="false" label="id" prop="id"></el-table-column>
-                    <el-table-column label="商品名" prop="product_name"></el-table-column>
-                    <el-table-column label="创建时间" prop="create_time" :formatter="formatDate" sortable
-                                     :sort-method="sortByCreateTime"></el-table-column>
-                    <el-table-column label="完成时间" prop="finish_time" :formatter="formatDate" sortable
-                                     :sort-method="sortByFinishTime"></el-table-column>
+                    <el-table-column label="商品名" prop="product_name" sortable></el-table-column>
+                    <el-table-column label="创建时间" prop="create_time" sortable ></el-table-column>
+                    <el-table-column label="完成时间" prop="finish_time" sortable ></el-table-column>
                     <el-table-column label="交易方式" prop="trading"></el-table-column>
                     <el-table-column label="买家ID" prop="buyer"></el-table-column>
                     <el-table-column label="卖家ID" prop="seller"></el-table-column>
                     <el-table-column label="订单状态" prop="state" min-width="100"></el-table-column>
                 </el-table>
-<!--                <el-pagination-->
-<!--                    :total="OrderList"-->
-<!--                    :page-size="pageSize"-->
-<!--                    @current-change="handlePageChange"-->
-<!--                ></el-pagination>-->
+              <div style="display: flex">
+                <div style="flex:4"></div>
+                <el-pagination
+                    style="flex: 1"
+                    :current-page="current"
+                    :total="total"
+                    :page-size="pageSize"
+                    @current-change="handlePageChange"
+                ></el-pagination>
+                <div style="flex:4"></div>
+              </div>
             </el-col>
         </el-main>
     </el-container>
@@ -43,41 +48,61 @@
 
 <script lang="ts" setup>
 
-import {Order} from "@/views/User_History/type/order";
+import {Order} from "@/views/Order_History/type/order";
 import {onMounted, ref} from "vue";
 import {getOrderListById} from "@/api/Order";
 
 const user_id = 1;
-//列表最大显示行数
+//分页查询相关
+let current = 1;
+let total = 1;
 const pageSize = 10;
+let state = "all"
 //定义订单列表
 const OrderList = ref<Order[]>();
 
 onMounted(() => {
-  getOrderListById(user_id).then(res=>{
-    OrderList.value=res.data
-    console.log(OrderList.value)
+  GetOrderList()
+})
+
+//获取订单列表
+function GetOrderList(){
+  getOrderListById(user_id,pageSize,current,state).then(res=>{
+    OrderList.value=res.data.records
+    total=res.data.total;
+    current=res.data.current;
   }).catch(err=>{
     console.log("error"+err)
   })
-})
+}
+//翻页
+function handlePageChange(page:number){
+  current = page
+  GetOrderList()
+}
 
-// const sortByCreateTime = (a: Order, b: Order): number => {
-//     const timeA = a.create_time.getTime();
-//     const timeB = b.create_time.getTime();
-//     return timeA - timeB;
-// };
-const sortByFinishTime = (a: Order, b: Order): number => {
-    const timeA = a.finish_time.getTime();
-    const timeB = b.finish_time.getTime();
-    return timeA - timeB;
-};
-// // 格式化日期的方法
-// const formatDate = (row: Order, column: any) => {
-//     const date = row[column.property];
-//     // 自定义日期格式，这里使用了 JavaScript 的内置方法 toLocaleString()，
-//     return date.toLocaleString();
-// };
+//分类查看
+function ListAll(){
+  state = "all"
+  current = 1
+  GetOrderList()
+}
+function Listfinish(){
+  state = "finish"
+  current = 1
+  GetOrderList()
+}
+function ListUnfinished(){
+  state = "unfinished"
+  current = 1
+  GetOrderList()
+}
+
+
+//行点击事件
+function handleRowClick(){
+
+}
 
 
 

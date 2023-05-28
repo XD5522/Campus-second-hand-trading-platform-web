@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/userhistory',
     name: 'userhistory',
-    component:()=> import('../views/User_History/User_History.vue')
+    component:()=> import('@/views/Order_History/History.vue')
   }
 ]
 
