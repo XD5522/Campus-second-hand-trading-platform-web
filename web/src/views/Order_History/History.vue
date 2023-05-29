@@ -43,14 +43,20 @@
               </div>
             </el-col>
         </el-main>
+      <modal style="position: relative;z-index: 9999"
+             :visible="visible"
+             :title = "title"
+             :order_id="order_id"
+             @update:visible="visible = $event" />
     </el-container>
 </template>
 
 <script lang="ts" setup>
 
 import {Order} from "@/views/Order_History/type/order";
-import {onMounted, ref} from "vue";
+import {defineComponent, onMounted, ref} from "vue";
 import {getOrderListById} from "@/api/Order";
+import Modal from "@/views/Order_History/components/Order.vue";
 
 const user_id = 1;
 //分页查询相关
@@ -100,11 +106,20 @@ function ListUnfinished(){
 
 
 //行点击事件
-function handleRowClick(){
-
-}
-
-
+const visible = ref(false);
+const title = ref("订单详情")
+let order_id = 1;
+const handleRowClick = (row:Order) => {
+  console.log('点击的行数据:', row);
+  order_id = row.id;
+  visible.value=true;
+};
+defineComponent({
+  components: { Modal },
+  setup() {
+    return { visible, title,order_id }
+  }
+})
 
 </script>
 
@@ -113,6 +128,8 @@ function handleRowClick(){
     margin-top: -76px;
     min-height: 100vh;
     display: flex;
+    position: relative;
+    z-index: auto;
     flex-direction: column;
 }
 

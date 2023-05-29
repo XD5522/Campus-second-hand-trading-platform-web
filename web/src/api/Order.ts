@@ -38,3 +38,12 @@ export function getOrderListById(id:number,pagesize:number,pagenum:number,state:
         return null;
     }
 }
+export function GetOrderDetail(order_id:number){
+    return request({
+        method:"get",
+        url: `/order/GetOrderDetail`,
+        params:{
+            order_id:order_id
+        }
+    })
+}
