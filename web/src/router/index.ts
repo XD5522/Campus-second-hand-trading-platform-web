@@ -44,6 +44,14 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: true
     }
   },
+  {//用户注册界面
+    path: '/userregister',
+    name: 'userregister',
+    component:()=> import('../views/User_Register/User_Register.vue'),
+    meta: {
+      hideNavbar: true
+    }
+  },
   {//用户个人中心
     path: '/userzone',
     name: 'userzone',
