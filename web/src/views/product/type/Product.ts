@@ -13,6 +13,5 @@ export interface product{
     star: number;
     trading: String;
     state: String;
-    imagePath: String;
-
+    img: String;
 }

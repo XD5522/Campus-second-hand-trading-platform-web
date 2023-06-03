@@ -9,6 +9,7 @@ const request = axios.create(
 )
 //请求拦截
 request.interceptors.request.use((config)=>{
+    // @ts-ignore
     config.headers = config.headers || {}
     if(localStorage.getItem('token')){//将token附加到请求中
         config.headers.token = localStorage.getItem('token') || ''
