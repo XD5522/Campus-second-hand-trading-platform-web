@@ -87,6 +87,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/trading',
     name: 'trading',
     component:()=>import('@/views/Trading/Trading.vue')
+  },
+  {
+    path: '/changeUserMsg',
+    name: 'changeUserMsg',
+    component:()=>import('@/views/ChangeUserMsg/ChangeUserMsg.vue')
   }
 ]
 

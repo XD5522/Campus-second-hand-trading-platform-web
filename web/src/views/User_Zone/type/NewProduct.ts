@@ -1,5 +1,5 @@
 export interface NewProduct {
-    imgurl: string,     //商品图片连接
+    img: string,     //商品图片连接
     user_id: number,    //商品对应的用户id
     user_name: string,  //商品对应的用户名
     name: string,       //商品名称,不超过20个字

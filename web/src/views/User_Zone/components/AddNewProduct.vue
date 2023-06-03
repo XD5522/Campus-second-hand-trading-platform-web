@@ -11,6 +11,17 @@
                     <el-form-item label="商品介绍" prop="product_intro">
                         <el-input v-model="product_form.intro"></el-input>
                     </el-form-item>
+                    <el-form-item label="商品图片" prop="product_img">
+                        <el-upload
+                            class="upload-demo"
+                            action="http://localhost:8080/product/uploadImg"
+                            :on-success="handleSuccess"
+                            :before-upload="beforeUpload"
+                        >
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-form-item>
                     <el-form-item label="商品价格" prop="product_price">
                         <el-input-number v-model.number="product_form.price" :min="1" :precision="2"></el-input-number>
                     </el-form-item>
@@ -42,9 +53,27 @@
 
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from 'vue'
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
+import {ElForm, ElFormItem, ElInput, ElButton, ElMessage} from 'element-plus';
 import {NewProduct} from "@/views/User_Zone/type/NewProduct";
 //TODO 商品图片上传
+const handleSuccess = (response: any) => {
+    product_form.value.img=response.data;
+};
+
+const beforeUpload = (file: File) => {
+  const isJPGorPNG = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isLt500K = file.size / 1024 < 500;
+
+  if (!isJPGorPNG) {
+    // 使用你自己的消息提示库，例如 Element Plus 的 ElMessage
+    ElMessage.error('只能上传 JPG/PNG 格式的图片');
+  }
+  if (!isLt500K) {
+    ElMessage.error('上传图片大小不能超过 500KB');
+  }
+
+  return isJPGorPNG && isLt500K;
+};
 
 const props = defineProps({
     title: {
@@ -97,8 +126,6 @@ function submitForm(this: any){
     emits('AddProduct');
 }
 
-
-
 //定义关闭模态框的方法
 const emits = defineEmits(['update:visible'])
 const closeModal = () => {
@@ -132,7 +159,7 @@ defineExpose({
     border-radius: 5px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     width: 700px;
-    height: 400px;
+    height: 600px;
 }
 .modal-form{
     width: 100px;
@@ -142,5 +169,11 @@ defineExpose({
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+.upload-demo {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
 }
 </style>
