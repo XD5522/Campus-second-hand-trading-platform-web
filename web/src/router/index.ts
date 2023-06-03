@@ -73,10 +73,20 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: true
     }
   },
-  {
+  {//历史订单页面
     path: '/history',
     name: 'history',
     component:()=> import('@/views/Order_History/History.vue')
+  },
+  {//评论中心页面
+    path: '/comment',
+    name: 'comment',
+    component:()=>import('@/views/Comment/Comment.vue')
+  },
+  {//交易中心页面
+    path: '/trading',
+    name: 'trading',
+    component:()=>import('@/views/Trading/Trading.vue')
   }
 ]
 

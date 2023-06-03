@@ -19,19 +19,30 @@
 
         <el-sub-menu>
 <!--TODO 这里要能获取用户的用户名-->
-            <template #title>用户名</template>
+            <template #title>{{ user_name }}</template>
             <el-menu-item index="/userzone">个人中心</el-menu-item>
             <el-menu-item index="/history">历史订单</el-menu-item>
+            <el-menu-item index="/comment">评价中心</el-menu-item>
+            <el-menu-item index="/trading">交易中心</el-menu-item>
             <el-menu-item index="2-3">购物车</el-menu-item>
             <el-menu-item index="2-4">注销</el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>
 
-<script>
-export default {
-    name: "Navbar"
-}
+<script lang="ts" setup>
+import {onBeforeMount, ref} from "vue";
+import {getUserMsg} from "@/api/UserZone";
+const user_id = ref(1);
+const user_name = ref();
+//TODO 获取用户id
+onBeforeMount(()=>{
+    getUserMsg(user_id.value).then(res=>{
+      user_name.value = res.data.userName;
+    }).catch(err=>{
+      console.log("error"+err)
+    })
+})
 </script>
 
 <style scoped>
