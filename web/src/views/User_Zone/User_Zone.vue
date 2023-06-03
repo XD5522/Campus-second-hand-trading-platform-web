@@ -8,12 +8,7 @@
                     <div class="header-box-info">
                         <div class="header-box-info-r">
                             <div class="header-box-info-img">
-                                <!--TODO src="url"-->
-                                <el-image
-                                        style="height: 100%;width: 100%"
-                                        src="{{imgurl}}"
-                                        lazy="lazy"
-                                />
+                                <el-image :src="imgurl"></el-image>
                             </div>
                             <div class="header-box-info-basic">
                                 <div style="display: flex;flex: 1;align-items: flex-end">
@@ -25,7 +20,7 @@
                                 </div>
                             </div>
                             <div class="header-box-info-action">
-                                <el-button style="margin-right: 20px" v-if="IsSelf">修改个人信息</el-button>
+                                <el-button style="margin-right: 20px" v-if="IsSelf" @click="Show_ChangeUserMsg">修改个人信息</el-button>
                             </div>
                         </div>
                     </div>
@@ -41,18 +36,30 @@
                         <el-button v-if="IsSelf" @click="Show_AddNewProductForm">添加商品</el-button>
                     </div>
                     <div class="content-box-table">
+                        <div style="display: flex">
+                          <div style="flex:4"></div>
+                          <el-pagination
+                              style="flex: 1"
+                              :current-page="current"
+                              :total="total"
+                              :page-size="pageSize"
+                              @current-change="handlePageChange"
+                          ></el-pagination>
+                          <div style="flex:4"></div>
+                        </div>
                         <el-row :gutter="10">
-                            <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="(product, index) in ProductList"
+                            <el-col :xs="6" :sm="12" :md="8" :lg="6" v-for="(product, index) in ProudctList"
                                     :key="index" style="margin-bottom:10px">
-                                <el-card shadow="hover" class="content-box-table-card">
-                                    <el-image :src="product.imageurl"/>
+                                <el-card shadow="hover" class="content-box-table-card" @click="handleCardClick(product)">
+                                    <el-image  style="height: 200px" :src="imgurlpath+product.img"/>
                                     <div style="padding: 14px;">
                                         <div class="text-item">{{ product.name }}</div>
-                                        <div class="text-item">销量：{{ product.sales }}</div>
+                                        <div class="text-item">销量：{{ product.hisSales }}</div>
                                         <div class="text-item">库存：{{ product.stock }}</div>
-                                        <div class="text-item">评价分数：{{ product.score }}</div>
+                                        <div class="text-item">评价分数：{{ product.star }}</div>
                                         <div class="text-item">价格：{{ product.price }}元</div>
-                                        <el-button v-if="IsSelf">下架商品</el-button>
+                                        <div class="text-item" v-if="IsSelf">状态：{{ product.state }}</div>
+                                        <el-button v-if="IsSelf" @click.stop="changeState(product)">修改商品状态</el-button>
                                     </div>
                                 </el-card>
                             </el-col>
@@ -86,30 +93,41 @@
 
             <!--@update:visible="visible = $event"来监视组件中的'update:visible'事件,当事件发生时修改visible属性的值-->
             <modal :visible="visible"
+                   :title = "title"
                    :product_form="product_form"
                    v-on:AddProduct="SubmitNewProduct"
                    @update:visible="visible = $event"/>
+            <ChangeUserMsg :visible="visible1"
+                           :title = "title"
+                           @update:visible="visible1 = $event"/>
         </el-main>
     </el-container>
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, ref, onMounted} from 'vue';
+import {defineComponent, ref, onMounted, onBeforeMount} from 'vue';
 import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
+import ChangeUserMsg from "@/views/User_Zone/components/ChangeUserMsg.vue";
 import {ElButton, ElForm, ElFormItem, ElInput} from "element-plus";
-import {AddNewProduct} from "@/api/UserZone";
+import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/UserZone";
+import {NewProduct} from "@/views/User_Zone/type/NewProduct";
 import {Product} from "@/views/User_Zone/type/Product";
+import {useRoute} from "vue-router";
 
 //用户基本信息
-let imgurl = "";
-let username = "NULL";//用户名
-let usermsg = "要让两个span元素横向显示，其中一个元素字体较大，另一个元素要和这个元素的底部对齐，可以将它们包装在一个div元素中，使用display: flex和align-items: flex-end属性来对齐它们。";//个人简介
-let userlevel = "LV0";//商家等级
-let IsSelf = ref(true);//判断是否是本人访问
+const route = useRoute()
+const id = ref(1);
+//const id = route.query.id;
+const imgurl = ref("");
+const username = ref("NULL");//用户名
+const usermsg = ref("");//个人简介
+const userlevel = ref("LV0");//商家等级
+const IsSelf = ref(false);//判断是否是本人访问
 
-onMounted(() => {
+onBeforeMount(() => {
     IsWho()
-    GetProductList()
+    getMsg()
+    GetproudctList(id.value,pageSize,current.value)
 })
 
 /**
@@ -117,43 +135,74 @@ onMounted(() => {
  * @constructor
  */
 function IsWho() {
-    //TODO 判断是不是用户本人在访问
-    //IsSelf = ref(false);
+    IsSelf.value=true;
+    //IsSelf.value = false;
 }
 
-//TODO 这部分全部需要适配后端
-//定义商品信息
-interface product {
-    imageurl: string;
-    name: string;
-    sales: number;
-    stock: number;
-    score: number;
-    price: number;
+function changeState(proudct:Product){
+    if(proudct.state=="normal"){
+        ChangePDState(proudct.id,"down");
+    }else{
+        ChangePDState(proudct.id,"normal");
+    }
+
 }
 
-//测试用的商品列表
-let ProductList: product[] = [
-    {imageurl: "https://picsum.photos/200/200", name: '商品1', sales: 100, stock: 200, score: 4.5, price: 100},
-    {imageurl: "https://picsum.photos/200/200", name: '商品2', sales: 200, stock: 100, score: 4.2, price: 200},
-    {imageurl: "https://picsum.photos/200/200", name: '商品3', sales: 300, stock: 50, score: 4.8, price: 300},
-    {imageurl: "https://picsum.photos/200/200", name: '商品4', sales: 400, stock: 80, score: 4.3, price: 400},
-    {imageurl: "https://picsum.photos/200/200", name: '商品5', sales: 500, stock: 150, score: 4.6, price: 500},
-];
+const imgurlpath = ref(imgurl.value = "http://101.43.208.136:9090/mall/");
+//获取用户信息
+function getMsg(){
+    getUserMsg(id.value).then(res=>{
+        imgurl.value = imgurlpath.value+res.data.img;
+        username.value = res.data.userName;
+        usermsg.value = res.data.introduction;
+        userlevel.value = "LV" + res.data.credit;
+    }).catch(err=>{
+      console.log("error"+err)
+    })
 
+}
+
+//商品列表
+const ProudctList = ref<Product[]>();
+const current = ref(1);
+const total = ref(1);
+const pageSize = 12;
+//切换页面
+function handlePageChange(page:number){
+  current.value = page
+  GetproudctList(id.value,pageSize,current.value);
+}
 /**
  * 获取商品列表
  * @constructor
  */
-function GetProductList() {
-    //TODO 商品列表的获取
+function GetproudctList(id:number,pageSize:number,pageNum:number) {
+    GetPDList(id,pageSize,pageNum).then(res=>{
+        ProudctList.value = res.data.records;
+        total.value=res.data.total;
+        current.value=res.data.current;
+    }).catch(err=>{
+        console.log("error"+err)
+    })
+}
+//点击跳转
+function handleCardClick(product:Product){
+    console.log("点击的商品id:"+product.id);
+    //TODO 跳转
 }
 
 
+/*修改个人信息的功能*/
+const visible1 = ref(false);
+const title = ref("修改个人信息");
+function Show_ChangeUserMsg(){
+    title.value = "修改个人信息";
+    visible1.value=true;
+}
 /*新增商品功能*/
 const visible = ref(false)
 //定义商品表
-const product_form = ref<Product>({
+const product_form = ref<NewProduct>({
     imgurl: '',
     user_id: 1,
     user_name: '张三',
@@ -200,6 +249,7 @@ const rules = {
 
 //显示新增商品的子组件
 function Show_AddNewProductForm() {
+    title.value = "新增商品";
     if (!visible.value) visible.value = true;
 }
 
@@ -208,14 +258,12 @@ function SubmitNewProduct() {
 }
 
 
-//TODO 商品详情页的跳转
-//TODO 分页显示
 defineComponent({
-    components: {Modal},
+    components: {Modal,ChangeUserMsg},
     setup() {
         //子组件 Modal 是通过 teleport 挂载到 body 元素下的，因此它实际上是一个独立的组件，并不受父组件的包裹影响
         //因此可以直接使用 {{title}} 来显示 title 的值，而不需要在子组件中定义。
-        return {visible, product_form}
+        return {visible, product_form , visible1, title}
     }
 });
 </script>

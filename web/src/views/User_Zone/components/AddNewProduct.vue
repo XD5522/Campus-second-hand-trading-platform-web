@@ -3,6 +3,7 @@
         <!-- 显示模态框 -->
         <div v-if="visible" class="modal-overlay">
             <div class="modal">
+                <h2>{{ title }}</h2>
                 <el-form :model="product_form" :rules="rule" ref="formRef">
                     <el-form-item label="商品名称" prop="product_name">
                         <el-input v-model="product_form.name"></el-input>
@@ -42,22 +43,25 @@
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from 'vue'
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
-import {Product} from "@/views/User_Zone/type/Product";
+import {NewProduct} from "@/views/User_Zone/type/NewProduct";
 //TODO 商品图片上传
 
 const props = defineProps({
+    title: {
+      type: String as PropType<string>,
+    },
     visible: {
         type: Boolean as PropType<boolean>,
         required: true,
     },
     product_form: {
-        type: Object as PropType<Product>,
+        type: Object as PropType<NewProduct>,
         required: true
     }
 })
 
 //获取父组件中传递的值
-const product_form = ref<Product>(props.product_form);
+const product_form = ref<NewProduct>(props.product_form);
 //定义el-select中使用的option
 const option1 = ref("商家包邮");
 const option2 = ref("自付运费");
