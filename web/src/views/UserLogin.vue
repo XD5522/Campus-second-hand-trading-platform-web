@@ -4,11 +4,11 @@
             <div class="login-form">
                 <h2 class="login-title">用户登录</h2>
                 <el-form ref="loginForm" :model="form" :rules="rules" label-width="0px">
-                    <el-form-item prop="username">
-                        <el-input v-model="form.username" placeholder="请输入账号"></el-input>
+                    <el-form-item prop="userName">
+                        <el-input v-model="form.userName" placeholder="请输入账号"></el-input>
                     </el-form-item>
-                    <el-form-item prop="password">
-                        <el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>
+                    <el-form-item prop="userPassword">
+                        <el-input type="password" v-model="form.userPassword" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="handleLogin">登录</el-button>
@@ -27,8 +27,8 @@ import {login} from "@/api/userlogin";
 import router from "@/router";
 
 interface Form {
-    username: string;
-    password: string;
+    userName: string;
+    userPassword: string;
 }
 
 export default defineComponent({
@@ -43,14 +43,14 @@ export default defineComponent({
     data() {
         return {
             form: {
-                username: '',
-                password: ''
+                userName: '',
+                userPassword: ''
             } as Form,
             rules: {
-                username: [
+                userName: [
                     { required: true, message: '请输入用户名', trigger: 'blur' }
                 ],
-                password: [
+                userPassword: [
                     { required: true, message: '请输入密码', trigger: 'blur' }
                 ]
             }
@@ -61,29 +61,31 @@ export default defineComponent({
             (this.$refs.loginForm as any).validate((valid: any) => {
                 if(valid){//输入框不能为空
                     //加密密码
-                    const md5password = md5(this.form.password);
+                    const md5password = md5(this.form.userPassword);
                     //将待提交表单封装进data
                     const data = {
-                        username : this.form.username,
-                        password : md5password
+                        userName : this.form.userName,
+                        userPassword : md5password
                     }
                     console.log(data);
 
                     //调用@api/login登陆
                     login(data).then((res)=>{
-                        console.log(res);
-
-                        //TODO 这里需要判断登陆是否成功
-
-                        //登陆成功后需要保存token,并跳转
-                        //localStorage.setItem("token",res.data.token)//保存token
-                        router.push('/')
+                        console.log(res)
+                        if(res.code == 200) {
+                            //登陆成功后需要保存token,并跳转
+                            localStorage.setItem("token",res.data.data)
+                            console.log(localStorage)
+                            router.push('/')
+                        }
+                        else {
+                            alert("用户名或密码错误");
+                        }
 
                     })
-                    console.log("登陆成功");
                 }
                 else{
-                    alert("登陆失败");
+                  alert("请输入用户名和密码");
                 }
             });
         }

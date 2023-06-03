@@ -44,6 +44,14 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: true
     }
   },
+  {//用户注册界面
+    path: '/userregister',
+    name: 'userregister',
+    component:()=> import('../views/User_Register/User_Register.vue'),
+    meta: {
+      hideNavbar: true
+    }
+  },
   {//用户个人中心
     path: '/userzone',
     name: 'userzone',
@@ -65,10 +73,20 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: true
     }
   },
-  {
-    path: '/userhistory',
-    name: 'userhistory',
-    component:()=> import('../views/User_History/User_History.vue')
+  {//历史订单页面
+    path: '/history',
+    name: 'history',
+    component:()=> import('@/views/Order_History/History.vue')
+  },
+  {//评论中心页面
+    path: '/comment',
+    name: 'comment',
+    component:()=>import('@/views/Comment/Comment.vue')
+  },
+  {//交易中心页面
+    path: '/trading',
+    name: 'trading',
+    component:()=>import('@/views/Trading/Trading.vue')
   }
 ]
 

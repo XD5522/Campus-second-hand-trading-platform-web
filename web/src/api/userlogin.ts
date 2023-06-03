@@ -1,8 +1,8 @@
 import request from "@/api/request";
 
 interface loginData{
-    username:string,
-    password:string
+    userName:string,
+    userPassword:string
 }
 
 /**
@@ -11,7 +11,7 @@ interface loginData{
  */
 export function login(data: loginData) {
     return request({
-        url: '/',
+        url: '/user/login',
         method: 'post',
         data: data // 传入登录数据
     });
