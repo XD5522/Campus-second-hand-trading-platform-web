@@ -62,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'search',
     component:()=> import('@/views/search/Index.vue'),
     meta: {
-      hideNavbar: true
+      hideNavbar: false
     }
   },
   {
@@ -70,7 +70,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'product',
     component:()=> import('@/views/product/Index.vue'),
     meta: {
-      hideNavbar: true
+      hideNavbar: false
     }
   },
   {//历史订单页面

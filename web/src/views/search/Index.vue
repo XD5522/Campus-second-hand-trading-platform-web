@@ -25,67 +25,86 @@
 
 <template>
     <CcBar></CcBar>
+
     <div class="search-page">
-        <el-input v-model="searchText" placeholder="请输入关键字搜索" class="search-input" />
-        <el-button type="primary" class="search-button" @click="handleSearch">搜索</el-button>
+        <el-col :span="22" :push="1" style="text-align: left">
+            <el-input v-model="searchText" placehlder="请输入关键字搜索" class="search-input" style="width: 50%"/>
+            <el-button type="primary" class="search-button" @click="handleSearch">搜索</el-button>
+            <el-select v-model="value" placeholder="Select">
+                <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    v-model = value
+                    @click = "handleSearch"
+                />
+            </el-select>
 
-        <el-select v-model="value" placeholder="Select">
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                v-model = value
-                @click = "handleSearch"
-            />
-        </el-select>
-
+        </el-col>
     </div>
     <div class="search-product" >
-        <el-row gutter="10" style="margin-left: 10px">
-            <el-col
-                :xs="24"
-                :sm="12"
-                :md="8"
-                :lg="6"
-                style="margin-bottom: 10px"
-                v-for="(product,index) in products"
+        <el-col :span="22" :push="1">
+            <div class="example-pagination-block" v-if="total>0">
+                <el-pagination
+                    v-model:current-page="current"
+                    small
+                    background
+                    layout="prev, pager, next"
+                    v-model:total="total"
+                    @current-change="handleSearch"
+                />
+            </div>
+            <el-row gutter="10">
+                <el-col
+                    :xs="6"
+                    :sm="12"
+                    :md="8"
+                    :lg="6"
+                    style="margin-bottom: 10px"
+                    v-for="(product,index) in products"
 
-            >
-                <el-card >
-                    <div class = "intro">
-                        <el-image style=" width: 100%; height: 100%; user-select: none;" :src="path+product.img" :fit="fit"/>
-                    </div>
-                    <div>
+                >
+                    <el-card @click="push(String(product.id))">
+                        <div class = "intro">
+                            <el-image style=" width: 100%; height: 250px; user-select: none;" :src="path+product.img" :fit="fit"/>
+                        </div>
                         <div style="text-align: left;">
-                            <span style=";margin-right: 10px;color: #e4393c;font-size: 20px;">￥{{product.price}}</span>
+                            <div style="margin-left: 10px;">
+                                <span style="color: #e4393c;font-size: 20px;">￥{{product.price}}</span>
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span>店铺：</span><span style="margin-right: 10px;color: #666">{{product.userName}}</span>
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span style="margin-right: 10px;">{{product.name}}</span>
+                            </div>
+
+
+
+                            <div style="margin-left: 10px;">
+                                <span>销量：{{product.hisSales}}</span>
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span>库存：{{product.stock}}</span>
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span>评分：{{product.star}}</span>
+                            </div>
                         </div>
-                        <div style=" text-align: left;margin-left: 10px;">
-                            <span style="margin-right: 10px;">{{product.name}}</span>
-                        </div>
-                        <div style=" text-align: left;margin-left: 10px;">
-                            <span style="margin-right: 10px;color: #666">{{product.userName}}</span>
-                        </div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-        <div class="example-pagination-block" v-if="total>0">
-            <el-pagination
-                v-model:current-page="current"
-                small
-                background
-                layout="prev, pager, next"
-                v-model:total="total"
-                @current-change="handleSearch"
-            />
-        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-col>
+
+
+        <el-col :span="1"></el-col>
     </div>
 
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, onMounted, ref} from 'vue';
+import { onMounted, ref} from 'vue';
 import { ElInput, ElButton } from 'element-plus';
 import CcBar from "@/components/CcBar.vue";
 import { search } from "@/api/search"

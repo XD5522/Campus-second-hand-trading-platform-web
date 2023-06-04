@@ -1,4 +1,5 @@
 import request from "@/api/request";
+import {Car} from "@/views/product/type/car";
 
 export function getProductById(id:String){
     return request({
@@ -6,6 +7,15 @@ export function getProductById(id:String){
         url: `/product?id=${id}`
     })
 }
+
+export function proToCar(car:Car){
+    return request({
+        method:"post",
+        url: "/car",
+        data:car
+    })
+}
+
 // export function addProduct(data:FormData){
 //     return request({
 //         method:"post",
