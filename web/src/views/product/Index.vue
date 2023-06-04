@@ -38,6 +38,7 @@ let car = ref<Car>({
 
 import { ElMessageBox } from 'element-plus'
 import {Car} from "@/views/product/type/car";
+import {GetCommentPage} from "@/api/Comment";
 
 function carFinish(){
     addCar()
@@ -84,6 +85,7 @@ function addCar(){
 
 onMounted(()=>{
     getProduct()
+    getComments()
 })
 
 
@@ -93,88 +95,156 @@ const fit = 'contain'
 let mounted = ref<boolean>(false);
 let showCar = ref<boolean>(false);
 
+interface Comment{
+    id: number,
+    user_id: number,
+    user_name: string,
+    img: string,
+    product_id: number,
+    product_name: string,
+    content: string,
+    star: number,
+    time: Date
+}
+const comments = ref<Comment[]>();
+const user_id = ref(1);
+const current = ref(1);//当前页面
+const pageSize = ref(5);
+const total = ref(1);
+const state = ref("PD");
+const ShowProductName =ref(true);
+const imgpath = "http://101.43.208.136:9090/mall/";
+function getComments(){
+    GetCommentPage(user_id.value,pageSize.value,current.value,state.value).then(res=>{
+        comments.value = res.data.records;
+        total.value = res.data.total;
+    }).catch(err=>{
+        console.log("error"+err)
+    })
+}
+function handlePageChange(page:number){
+    current.value = page
+    getComments()
+}
 
 
 </script>
 
 <template>
     <div v-if = "mounted" style="background: white">
-        <div style="float: left;width: 70%">
-            <div style="float: left;margin-top: 30px;margin-left: 90px">
-                <el-image style="float: left;width: 350px; height: 350px; user-select: none;" :src="product.img" :fit="fit"/>
-            </div>
-            <div style="text-align: left;float: left;margin-left: 30px; margin-top: 30px">
-                <div style="margin-left: 0;color: #666; padding-top: 10px; line-height: 28px; margin-bottom: 5px;">
-                    <span style="margin-left: 0">{{product.name}}</span>
-                </div>
-                <br/>
+        <div style="display: flex">
 
-                <div>
-                    <span style="font-size: 16px;">商品价格</span>  <span style="color: red;font-size: 26px">￥{{product.price}}</span>
+            <div style="float: left;width: 70%">
+                <div style="float: left;margin-top: 30px;margin-left: 90px">
+                    <el-image style="float: left;width: 350px; height: 350px; user-select: none;" :src="product.img" :fit="fit"/>
                 </div>
-
-                <br/>
-                <div>
-                    <span>{{product.intro}}</span>
-                </div>
-
-                <br/>
-                <div>
-                    <span>历史销量：{{product.hisSales}}</span>
-                </div>
-
-                <br/>
-                <div>
-                    <span>在售数量：{{product.stock}}</span>
-                </div>
-                <br/>
-                <div>
-                    <span>商品尺寸：{{product.size}}</span>
-                </div>
-
-
-                <div style="float: left;">
-                    <el-input-number v-model="car.num" :min="1" :max="10"/>
-                </div>
-                <div style="float: left;">
-                    <el-button type="danger" @click="showCar=true">添加购物车</el-button>
-                </div>
-            </div>
-        </div>
-        <div style="float: left;width: 30%;margin-top: 30px; display: flex">
-            <el-card class="box-card">
-                <template #header>
-                    <div class="card-header">
-                        <span>店铺：</span>
-                        <el-button class="button" text>{{product.userName}}</el-button>
+                <div style="text-align: left;float: left;margin-left: 30px; margin-top: 30px">
+                    <div style="margin-left: 0;color: #666; padding-top: 10px; line-height: 28px; margin-bottom: 5px;">
+                        <span style="margin-left: 0">{{product.name}}</span>
                     </div>
-                </template>
-                <div >
-                    <span>商品类型：{{product.type}}</span>
-                </div>
-                <div>
-                    <span>购买人数：{{product.userCount}}</span>
-                </div>
-                <div >
-                    <span>商品评价：
-                        <el-rate
-                            v-model="product.star"
-                            disabled
-                            show-score
-                            text-color="#ff9900"
-                            score-template="{value} points"
-                        />
-                    </span>
-                </div>
-                <span style="color: #666666">——————————————————</span>
-                <div >
-                    <el-button type="primary">进店逛逛</el-button>
-                    <el-button type="warning">举报</el-button>
-                </div>
-            </el-card>
-        </div>
-        <div class="comment">
+                    <br/>
 
+                    <div>
+                        <span style="font-size: 16px;">商品价格</span>  <span style="color: red;font-size: 26px">￥{{product.price}}</span>
+                    </div>
+
+                    <br/>
+                    <div>
+                        <span>{{product.intro}}</span>
+                    </div>
+
+                    <br/>
+                    <div>
+                        <span>历史销量：{{product.hisSales}}</span>
+                    </div>
+
+                    <br/>
+                    <div>
+                        <span>在售数量：{{product.stock}}</span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span>商品尺寸：{{product.size}}</span>
+                    </div>
+
+
+                    <div style="float: left;">
+                        <el-input-number v-model="car.num" :min="1" :max="10"/>
+                    </div>
+                    <div style="float: left;">
+                        <el-button type="danger" @click="showCar=true">添加购物车</el-button>
+                    </div>
+                </div>
+            </div>
+            <div style="float: left;width: 30%;margin-top: 30px; display: flex">
+                <el-card class="box-card">
+                    <template #header>
+                        <div class="card-header">
+                            <span>店铺：</span>
+                            <el-button class="button" text>{{product.userName}}</el-button>
+                        </div>
+                    </template>
+                    <div >
+                        <span>商品类型：{{product.type}}</span>
+                    </div>
+                    <div>
+                        <span>购买人数：{{product.userCount}}</span>
+                    </div>
+                    <div >
+                        <span>商品评价：
+                            <el-rate
+                                v-model="product.star"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                score-template="{value} points"
+                            />
+                        </span>
+                    </div>
+                    <span style="color: #666666">——————————————————</span>
+                    <div >
+                        <el-button type="primary">进店逛逛</el-button>
+                        <el-button type="warning">举报</el-button>
+                    </div>
+                </el-card>
+            </div>
+
+        </div>
+        <div >
+            <span style="color: #666666">——————————————————————————————————————————————————————————————————————————————————</span>
+        </div>
+        <div style="margin-top: 30px">
+            <el-col :span="22" :push="1" >
+                <div class="comment-card" v-for="(comment,index) in comments" :key="index">
+                    <el-card>
+                        <div style="display: flex">
+                            <el-image style="height: 30px; border-radius: 50%" :src="imgpath+comment.img"/>
+                            <div style="margin-left: 5px; padding-top: 5px;">{{ comment.user_name }}</div>
+                            <div style="flex: 1"></div>
+                            <el-rate v-model="comment.star" :max="5"  :disabled=true></el-rate>
+                        </div>
+                        <div style="display: flex;height: 100px;margin-top: 10px">
+                            <div style="height: 100%;text-align: left">{{ comment.content }}</div>
+                        </div>
+                        <div style="display: flex">
+                            <div style="font-size: small;color: gray" v-if="ShowProductName">{{comment.product_name}}</div>
+                            <div style="flex: 1"></div>
+                            <div style="font-size: small">{{ comment.time }}</div>
+                        </div>
+                    </el-card>
+                </div>
+                <div style="display: flex">
+                    <div style="flex:4"></div>
+                    <el-pagination
+                        style="flex: 1"
+                        :current-page="current"
+                        :total="total"
+                        :page-size="pageSize"
+                        @current-change="handlePageChange"
+                    ></el-pagination>
+                    <div style="flex:4"></div>
+                </div>
+            </el-col>
         </div>
     </div>
 
