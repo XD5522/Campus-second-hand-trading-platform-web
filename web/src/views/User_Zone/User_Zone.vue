@@ -97,9 +97,6 @@
                    :product_form="product_form"
                    v-on:AddProduct="SubmitNewProduct"
                    @update:visible="visible = $event"/>
-            <ChangeUserMsg :visible="visible1"
-                           :title = "title"
-                           @update:visible="visible1 = $event"/>
         </el-main>
     </el-container>
 </template>
@@ -107,15 +104,13 @@
 <script lang="ts" setup>
 import {defineComponent, ref, onMounted, onBeforeMount} from 'vue';
 import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
-import ChangeUserMsg from "@/views/User_Zone/components/ChangeUserMsg.vue";
-import {ElButton, ElForm, ElFormItem, ElInput} from "element-plus";
+import {ElButton, ElForm, ElFormItem, ElInput, ElMessage} from "element-plus";
 import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/UserZone";
 import {NewProduct} from "@/views/User_Zone/type/NewProduct";
 import {Product} from "@/views/User_Zone/type/Product";
-import {useRoute} from "vue-router";
+import { useRouter} from "vue-router";
 
 //用户基本信息
-const route = useRoute()
 const id = ref(1);
 //const id = route.query.id;
 const imgurl = ref("");
@@ -145,7 +140,6 @@ function changeState(proudct:Product){
     }else{
         ChangePDState(proudct.id,"normal");
     }
-
 }
 
 const imgurlpath = ref(imgurl.value = "http://101.43.208.136:9090/mall/");
@@ -185,25 +179,23 @@ function GetproudctList(id:number,pageSize:number,pageNum:number) {
         console.log("error"+err)
     })
 }
-//点击跳转
+//点击跳转到商品详情页
 function handleCardClick(product:Product){
     console.log("点击的商品id:"+product.id);
     //TODO 跳转
 }
 
-
 /*修改个人信息的功能*/
-const visible1 = ref(false);
-const title = ref("修改个人信息");
+const title = ref("新增商品");
+const router = useRouter();
 function Show_ChangeUserMsg(){
-    title.value = "修改个人信息";
-    visible1.value=true;
+    router.push({path: '/changeUserMsg',});
 }
 /*新增商品功能*/
 const visible = ref(false)
 //定义商品表
 const product_form = ref<NewProduct>({
-    imgurl: '',
+    img: '',
     user_id: 1,
     user_name: '张三',
     name: '',
@@ -254,16 +246,23 @@ function Show_AddNewProductForm() {
 }
 
 function SubmitNewProduct() {
-    AddNewProduct(product_form.value);
+    AddNewProduct(product_form.value).then(res=>{
+        if(res.code==200){
+            visible.value=false;
+            ElMessage.success("添加成功");
+        }
+    }).catch(err=>{
+      console.log("error"+err)
+    })
 }
 
 
 defineComponent({
-    components: {Modal,ChangeUserMsg},
+    components: {Modal},
     setup() {
         //子组件 Modal 是通过 teleport 挂载到 body 元素下的，因此它实际上是一个独立的组件，并不受父组件的包裹影响
         //因此可以直接使用 {{title}} 来显示 title 的值，而不需要在子组件中定义。
-        return {visible, product_form , visible1, title}
+        return {visible, product_form , title}
     }
 });
 </script>
