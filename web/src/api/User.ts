@@ -1,5 +1,6 @@
 import request from "@/api/request";
 import {NewProduct} from "@/views/User_Zone/type/NewProduct";
+import {User} from "@/views/ChangeUserMsg/type/User";
 
 export function AddNewProduct(data: NewProduct) {
     return request({
@@ -39,5 +40,23 @@ export function ChangePDState(product_id:number,state:string){
             product_id:product_id,
             state:state,
         }
+    });
+}
+
+export function GetAllUserMsg(user_id:number){
+    return request({
+        url: '/user/GetAllUserMsg',
+        method: 'get',
+        params:{
+            user_id: user_id,
+        }
+    });
+}
+
+export function ChangeUserMsg(data:User){
+    return request({
+        url: '/user/ChangeUserMsg',
+        method: 'post',
+        data: data,
     });
 }

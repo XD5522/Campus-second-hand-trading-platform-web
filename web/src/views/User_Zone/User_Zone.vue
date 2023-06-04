@@ -105,21 +105,27 @@
 import {defineComponent, ref, onMounted, onBeforeMount} from 'vue';
 import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
 import {ElButton, ElForm, ElFormItem, ElInput, ElMessage} from "element-plus";
-import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/UserZone";
+import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/User";
 import {NewProduct} from "@/views/User_Zone/type/NewProduct";
 import {Product} from "@/views/User_Zone/type/Product";
-import { useRouter} from "vue-router";
+import {useRouter} from "vue-router";
+
 
 //用户基本信息
+
 const id = ref(1);
-//const id = route.query.id;
+const user_id = ref(1);
 const imgurl = ref("");
 const username = ref("NULL");//用户名
 const usermsg = ref("");//个人简介
 const userlevel = ref("LV0");//商家等级
 const IsSelf = ref(false);//判断是否是本人访问
 
+const router = useRouter();
+
 onBeforeMount(() => {
+    //TODO 通过cookie获取user_id
+    id.value = parseInt(router.currentRoute.value.query.id,10);
     IsWho()
     getMsg()
     GetproudctList(id.value,pageSize,current.value)
@@ -130,7 +136,9 @@ onBeforeMount(() => {
  * @constructor
  */
 function IsWho() {
-    IsSelf.value=true;
+    if(user_id.value == id.value){
+        IsSelf.value=true;
+    }
     //IsSelf.value = false;
 }
 
@@ -187,7 +195,6 @@ function handleCardClick(product:Product){
 
 /*修改个人信息的功能*/
 const title = ref("新增商品");
-const router = useRouter();
 function Show_ChangeUserMsg(){
     router.push({path: '/changeUserMsg',});
 }
@@ -250,6 +257,9 @@ function SubmitNewProduct() {
         if(res.code==200){
             visible.value=false;
             ElMessage.success("添加成功");
+        }else{
+            visible.value=false;
+            ElMessage.error("添加失败");
         }
     }).catch(err=>{
       console.log("error"+err)

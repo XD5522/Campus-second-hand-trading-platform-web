@@ -3,40 +3,50 @@
     <el-card class="register-card" shadow="always">
       <div class="register-form">
         <h2>用户注册</h2>
-        <el-form ref="registerFormRef" :model="registerForm" :rules="rules" label-width="80px">
+        <el-form ref="changeFormRef" :model="changeForm" :rules="rules" label-width="80px">
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="registerForm.userName" placeholder="请输入用户名"></el-input>
+            <el-input v-model="changeForm.userName" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="姓名" prop="name">
-            <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
+            <el-input v-model="changeForm.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
           <el-form-item label="城市" prop="city">
-            <el-input v-model="registerForm.city" placeholder="请输入城市"></el-input>
+            <el-input v-model="changeForm.city" placeholder="请输入城市"></el-input>
           </el-form-item>
           <el-form-item label="手机号" prop="phone">
-            <el-input v-model="registerForm.phone" placeholder="请输入手机号"></el-input>
+            <el-input v-model="changeForm.phone" placeholder="请输入手机号"></el-input>
           </el-form-item>
           <el-form-item label="性别" prop="gender">
-            <el-select v-model="registerForm.gender" placeholder="请选择性别">
+            <el-select v-model="changeForm.gender" placeholder="请选择性别">
               <el-option label="男" value="男" />
               <el-option label="女" value="女" />
             </el-select>
           </el-form-item>
           <el-form-item label="银行卡号" prop="bankcard">
-            <el-input v-model="registerForm.bankcard" placeholder="请输入银行卡号"></el-input>
+            <el-input v-model="changeForm.bankCard" placeholder="请输入银行卡号"></el-input>
           </el-form-item>
           <el-form-item label="电子邮箱" prop="email">
-            <el-input v-model="registerForm.email" placeholder="请输入电子邮箱"></el-input>
+            <el-input v-model="changeForm.email" placeholder="请输入电子邮箱"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="registerForm.password" placeholder="请输入密码"></el-input>
+          <el-form-item label="个人简介" prop="email">
+            <el-input v-model="changeForm.introduction" placeholder="请输入个人简介"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="checkpassword">
-            <el-input type="password" v-model="registerForm.checkpassword" placeholder="请再次输入密码"></el-input>
+          <el-form-item label="修改头像" prop="product_img">
+            <el-upload
+                class="upload-demo"
+                action="http://localhost:8080/product/uploadImg"
+                :on-success="handleSuccess"
+                :before-upload="beforeUpload"
+            >
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="修改微信" prop="wechat">
+            <el-input v-model="changeForm.wechat" placeholder="微信号"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="register(registerFormRef)">注册</el-button>
-            <el-button @click="resetForm(registerFormRef)">重置</el-button>
+            <el-button type="primary" @click="submit">修改</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -45,52 +55,61 @@
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, reactive, ref} from "vue";
-import {FormInstance, FormRules} from "element-plus";
-import {RegisterData} from "@/views/User_Register/type/RegisterData";
-import md5 from "md5";
-import {userRegister} from "@/api/UserRegister";
-import router from "@/router";
+import {onBeforeMount, reactive, ref} from "vue";
+import {ElButton, ElFormItem, ElMessage, FormInstance, FormRules} from "element-plus";
+import {User} from "@/views/ChangeUserMsg/type/User";
+import {ChangeUserMsg, GetAllUserMsg} from "@/api/User";
+import {useRouter} from "vue-router";
 
-defineComponent({
-  name: "User_Register"
+const changeForm = ref<User>({
+  id:0,
+  userName:'',
+  name:'',
+  city:'',
+  phone:'',
+  gender:'',
+  bankCard:'',
+  email:'',
+  introduction:'',
+  wechat:'',
+  img:''
 });
+const user_id = ref(1);
+//TODO 从cookie中获取用户id
 
-const registerForm = ref<RegisterData>({
-  userName: '',
-  name: '',
-  city: '',
-  phone: '',
-  gender: '',
-  bankcard: '',
-  email: '',
-  password: '',
-  checkpassword: ''
+const router = useRouter();
+onBeforeMount(()=>{
+  getAllMsg();//获取用户的基本信息
 })
-
-const registerFormRef = ref<FormInstance>()
-
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('请输入密码'))
-  } else {
-    if (registerForm.value.checkpassword !== '') {
-      if (!registerFormRef.value) return
-      registerFormRef.value.validateField('checkpassword', () => null)
-    }
-    callback()
-  }
-}
-const validatePass2 = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('请再次输入密码'))
-  } else if (value !== registerForm.value.password) {
-    callback(new Error("两次密码输入不一致"))
-  } else {
-    callback()
-  }
+//获取用户当前信息
+function getAllMsg(){
+  GetAllUserMsg(user_id.value).then(res=>{
+    changeForm.value = res.data;
+  }).catch(err=>{
+    console.log("error"+err)
+  })
 }
 
+/*更改头像部分*/
+const handleSuccess = (response: any) => {
+  changeForm.value.img=response.data;
+};
+
+const beforeUpload = (file: File) => {
+  const isJPGorPNG = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isLt500K = file.size / 1024 < 500;
+
+  if (!isJPGorPNG) {
+    // 使用你自己的消息提示库，例如 Element Plus 的 ElMessage
+    ElMessage.error('只能上传 JPG/PNG 格式的图片');
+  }
+  if (!isLt500K) {
+    ElMessage.error('上传图片大小不能超过 500KB');
+  }
+  return isJPGorPNG && isLt500K;
+};
+
+const changeFormRef = ref<FormInstance>()
 const rules = reactive<FormRules>({
   userName: [
     { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -113,55 +132,21 @@ const rules = reactive<FormRules>({
   email: [
     { required: true, message: '请输入电子邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入正确的电子邮件格式', trigger: ['blur', 'change'] }
-  ],
-  password: [
-    { validator: validatePass, required: true, trigger: 'blur' }
-  ],
-  checkpassword: [
-    { validator: validatePass2, required: true, trigger: 'blur' }
   ]
 })
-
-const register = (formEl: FormInstance | undefined) => {
-  if(!formEl) return
-  formEl.validate((valid) =>{
-    if(valid) {
-      // console.log("注册成功")
-      const md5password = md5(registerForm.value.password)
-      //将待提交表单封装进data
-      const data = {
-        userName: registerForm.value.userName,
-        name: registerForm.value.name,
-        city: registerForm.value.city,
-        phone: registerForm.value.phone,
-        gender: registerForm.value.gender,
-        bankcard: registerForm.value.bankcard,
-        email: registerForm.value.email,
-        password: md5password,
-        checkpassword: ''
-      } as RegisterData
-      //调用@api/register注册
-      userRegister(data).then((res) => {
-        console.log(res)
-        if(res.code == 200) {
-          alert(res.message)
-          router.push('/userlogin')
-        }
-        else alert(res.message)
-      })
+//上传修改
+function submit(){
+  console.log(changeForm.value);
+  ChangeUserMsg(changeForm.value).then(res=>{
+    if(res.code==200){
+      ElMessage.success("修改成功")
+      setTimeout(() => {
+        router.push({path: '/userzone', query: {id: changeForm.value.id}})
+      }, 2000);
     }
-    else {
-      alert("注册失败")
-      return false
-    }
+  }).catch(err=>{
+    console.log("error"+err)
   })
-}
-
-// 重置表单
-// 参数formEL只能是FormInstance类型或者undefined
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
 }
 
 </script>
@@ -180,5 +165,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 .register-form {
   padding: 20px;
+}
+
+.upload-demo {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
 }
 </style>

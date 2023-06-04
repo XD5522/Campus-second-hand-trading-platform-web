@@ -14,7 +14,7 @@
                     <el-form-item label="商品图片" prop="product_img">
                         <el-upload
                             class="upload-demo"
-                            action="http://localhost:8080/product/uploadImg"
+                            action="http://localhost:8080/user/uploadImg"
                             :on-success="handleSuccess"
                             :before-upload="beforeUpload"
                         >
