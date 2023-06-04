@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from 'vue'
 import {GetOrderDetail} from "@/api/Order";
-import {Detail} from "@/views/Order_History/type/detail";
+import {Detail} from "@/views/Order/type/detail";
 
 
 const props = defineProps({

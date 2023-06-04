@@ -1,5 +1,5 @@
 import request from "@/api/request";
-import {NewProduct} from "@/views/User_Zone/type/NewProduct";
+import {NewProduct} from "@/views/Zone/type/NewProduct";
 import {User} from "@/views/ChangeUserMsg/type/User";
 
 export function AddNewProduct(data: NewProduct) {

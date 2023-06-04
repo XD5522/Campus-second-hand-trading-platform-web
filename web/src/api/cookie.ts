@@ -19,9 +19,9 @@ export const getToken = () => {
 }
 
 export const getUserId = () => {
-    const userId = Cookies.get(USER_ID)
+    const userId =parseInt(Cookies.get(USER_ID),10)
     if(userId) return userId
-    else return false
+    else return -1
 }
 export const delToken = () => {
     Cookies.remove(TOKEN_KEY)

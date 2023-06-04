@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
   {//用户个人中心
     path: '/userzone',
     name: 'userzone',
-    component:()=> import('@/views/User_Zone/User_Zone.vue')
+    component:()=> import('@/views/Zone/User_Zone.vue')
   },
   {
     path: '/search',

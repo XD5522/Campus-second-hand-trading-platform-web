@@ -103,11 +103,11 @@
 
 <script lang="ts" setup>
 import {defineComponent, ref, onMounted, onBeforeMount} from 'vue';
-import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
+import Modal from "@/views/Zone/components/AddNewProduct.vue";
 import {ElButton, ElForm, ElFormItem, ElInput, ElMessage} from "element-plus";
 import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/User";
-import {NewProduct} from "@/views/User_Zone/type/NewProduct";
-import {Product} from "@/views/User_Zone/type/Product";
+import {NewProduct} from "@/views/Zone/type/NewProduct";
+import {Product} from "@/views/Zone/type/Product";
 import {useRouter} from "vue-router";
 
 

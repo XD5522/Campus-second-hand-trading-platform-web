@@ -15,7 +15,8 @@
         <el-menu-item index="/about">搜索商品</el-menu-item>
         <div class="flex-grow"/>
         <el-image style="height: 50px;border-radius: 50%" :src=user_img />
-        <el-sub-menu>
+        <el-menu-item v-if="!ISLogin" index="/userlogin">登陆</el-menu-item>
+        <el-sub-menu v-if="ISLogin">
 <!--TODO 这里要能获取用户的用户名-->
             <template #title>{{ user_name }}</template>
             <el-menu-item @click="GoToUserZone">个人中心</el-menu-item>
@@ -32,16 +33,23 @@
 import {onBeforeMount, ref} from "vue";
 import {getUserMsg} from "@/api/User";
 import {useRouter} from "vue-router";
+import {getUserId} from "@/api/cookie";
 const user_id = ref(1);
 const user_name = ref();
 const user_img = ref();
 const router = useRouter();
+const ISLogin = ref(false);
+
+
 function GoToUserZone(){
   router.push({path: '/userzone', query: {id: user_id.value}})
 }
 
 onBeforeMount(()=>{
-    //TODO 获取用户id
+    user_id.value = getUserId();
+    if(user_id.value!=-1){
+      ISLogin.value = true;
+    }
     getUserMsg(user_id.value).then(res=>{
       user_name.value = res.data.userName;
       user_img.value = "http://101.43.208.136:9090/mall"+res.data.img;
