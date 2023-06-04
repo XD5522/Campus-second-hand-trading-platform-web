@@ -17,7 +17,6 @@
         <el-image style="height: 50px;border-radius: 50%" :src=user_img />
         <el-menu-item v-if="!ISLogin" index="/userlogin">登陆</el-menu-item>
         <el-sub-menu v-if="ISLogin">
-<!--TODO 这里要能获取用户的用户名-->
             <template #title>{{ user_name }}</template>
             <el-menu-item @click="GoToUserZone">个人中心</el-menu-item>
             <el-menu-item index="/history">历史订单</el-menu-item>

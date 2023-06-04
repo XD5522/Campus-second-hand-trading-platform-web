@@ -56,6 +56,7 @@ import {useRouter} from "vue-router";
 import {GetCommentPage} from "@/api/Comment";
 import {Comment} from "./type/Comment"
 import {ElButton} from "element-plus";
+import {getUserId} from "@/api/cookie";
 
 const user_id = ref(1);
 const current = ref(1);//当前页面
@@ -78,7 +79,8 @@ function GetCommentList(){
 }
 
 onBeforeMount(() => {
-  //TODO 通过cookie获取user_id
+  user_id.value = getUserId();
+  if(user_id.value==-1) router.push({path:"/userlogin"})
   GetCommentList()
 })
 //翻页
