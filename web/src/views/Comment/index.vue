@@ -23,12 +23,12 @@
               <el-rate v-model="comment.star" :max="5"  :disabled=true></el-rate>
             </div>
             <div style="display: flex;height: 100px;margin-top: 10px">
-              <div style="height: 100%">{{ comment.content }}</div>
+              <div style="height: 100%;text-align: left">{{ comment.content }}</div>
             </div>
             <div style="display: flex">
-              <div>{{comment.product_name}}</div>
+              <div style="font-size: small;color: gray">{{comment.product_name}}</div>
               <div style="flex: 1"></div>
-              <div>{{ comment.time }}</div>
+              <div style="font-size: small">{{ comment.time }}</div>
             </div>
 
           </el-card>
@@ -71,9 +71,6 @@ function GetCommentList(){
   GetCommentPage(user_id.value,pageSize.value,current.value,state.value).then(res=>{
     comments.value = res.data.records;
     total.value = res.data.total;
-    // console.log(res.data)
-    // console.log("评论列表");
-    // console.log(comments.value)
   }).catch(err=>{
     console.log("error"+err)
   })
