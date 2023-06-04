@@ -89,7 +89,7 @@ import {defineComponent, onMounted, ref} from 'vue';
 import { ElInput, ElButton } from 'element-plus';
 import CcBar from "@/components/CcBar.vue";
 import { search } from "@/api/search"
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import { product } from "@/views/search/type/Product";
 
 const searchText = ref('');
@@ -99,6 +99,7 @@ const current = ref(1);
 const path = 'http://101.43.208.136:9090/mall';
 const fit = 'contain'
 
+let route = useRoute()
 let router = useRouter()
 function handleSearch(){
     search(searchText.value,value.value,current.value).then(res=>{
@@ -135,8 +136,10 @@ const options = [
         label: '按好评度排序',
     }
 ]
-onMounted(()=>{
 
+onMounted(()=>{
+    searchText.value = String(route.query.searchText)
+    handleSearch()
 })
 
 

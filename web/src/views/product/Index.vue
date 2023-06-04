@@ -73,7 +73,6 @@ let clickImg = ref<boolean>(false);
                   <el-upload
                       class="upload-demo"
                       drag
-                      action="http://localhost:8080/product/updateImg?id=1"
                       multiple
                       :on-success="upImgFinish"
                   >
