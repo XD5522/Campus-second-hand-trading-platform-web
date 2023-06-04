@@ -103,12 +103,13 @@
 
 <script lang="ts" setup>
 import {defineComponent, ref, onMounted, onBeforeMount} from 'vue';
-import Modal from "@/views/User_Zone/components/AddNewProduct.vue";
+import Modal from "@/views/Zone/components/AddNewProduct.vue";
 import {ElButton, ElForm, ElFormItem, ElInput, ElMessage} from "element-plus";
 import {AddNewProduct, ChangePDState, GetPDList, getUserMsg} from "@/api/User";
-import {NewProduct} from "@/views/User_Zone/type/NewProduct";
-import {Product} from "@/views/User_Zone/type/Product";
+import {NewProduct} from "@/views/Zone/type/NewProduct";
+import {Product} from "@/views/Zone/type/Product";
 import {useRouter} from "vue-router";
+import {getUserId} from "@/api/cookie";
 
 
 //用户基本信息
@@ -124,7 +125,7 @@ const IsSelf = ref(false);//判断是否是本人访问
 const router = useRouter();
 
 onBeforeMount(() => {
-    //TODO 通过cookie获取user_id
+    user_id.value = getUserId();
     id.value = parseInt(router.currentRoute.value.query.id,10);
     IsWho()
     getMsg()

@@ -25,7 +25,7 @@ import {defineComponent, reactive} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElCard } from 'element-plus';
 import {getUserId, login} from "@/api/userlogin";
 import router from "@/router";
-import {getToken, setToken, setUserId} from "@/cookie";
+import {getToken, setToken, setUserId} from "@/api/cookie";
 
 interface Form {
     userName: string;

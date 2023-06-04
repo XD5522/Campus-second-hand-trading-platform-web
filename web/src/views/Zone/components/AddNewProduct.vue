@@ -54,8 +54,7 @@
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from 'vue'
 import {ElForm, ElFormItem, ElInput, ElButton, ElMessage} from 'element-plus';
-import {NewProduct} from "@/views/User_Zone/type/NewProduct";
-//TODO 商品图片上传
+import {NewProduct} from "@/views/Zone/type/NewProduct";
 const handleSuccess = (response: any) => {
     product_form.value.img=response.data;
 };

@@ -43,22 +43,19 @@
               </div>
             </el-col>
         </el-main>
-      <modal style="position: relative;z-index: 9999"
-             :visible="visible"
-             :title = "title"
-             :order_id="order_id"
-             @update:visible="visible = $event" />
     </el-container>
 </template>
 
 <script lang="ts" setup>
 
 import {Order} from "@/views/Order_History/type/order";
-import {defineComponent, onMounted, ref} from "vue";
+import {defineComponent, onBeforeMount, onMounted, ref} from "vue";
 import {getOrderListById} from "@/api/Order";
-import Modal from "@/views/Order_History/components/Order.vue";
+import {getUserId} from "@/api/cookie";
+import {useRouter} from "vue-router";
 
-const user_id = 1;
+
+const user_id = ref();
 //分页查询相关
 const current = ref(1);
 const total = ref();
@@ -67,13 +64,17 @@ let state = "all"
 //定义订单列表
 const OrderList = ref<Order[]>();
 
-onMounted(() => {
+onBeforeMount(() => {
+  user_id.value = getUserId();
+  if(user_id.value==-1){
+    useRouter().push({path: '/userlogin'})
+  }
   GetOrderList()
 })
 
 //获取订单列表
 function GetOrderList(){
-  getOrderListById(user_id,pageSize,current.value,state).then(res=>{
+  getOrderListById(user_id.value,pageSize,current.value,state).then(res=>{
     OrderList.value=res.data.records
     total.value=res.data.total;
     current.value=res.data.current;
@@ -104,7 +105,6 @@ function ListUnfinished(){
   GetOrderList()
 }
 
-
 //行点击事件
 const visible = ref(false);
 const title = ref("订单详情")
@@ -114,12 +114,6 @@ const handleRowClick = (row:Order) => {
   order_id = row.id;
   visible.value=true;
 };
-defineComponent({
-  components: { Modal },
-  setup() {
-    return { visible, title,order_id }
-  }
-})
 
 </script>
 
