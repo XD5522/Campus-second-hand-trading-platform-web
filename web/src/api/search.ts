@@ -8,7 +8,7 @@ export function search(name:String,order:String,current:number){
             name:name,
             current:current,
             order:order,
-            num:10
+            num:12
         }
     })
 }

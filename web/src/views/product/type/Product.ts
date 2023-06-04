@@ -14,4 +14,5 @@ export interface product{
     trading: String;
     state: String;
     img: String;
+    userCount:number;
 }
