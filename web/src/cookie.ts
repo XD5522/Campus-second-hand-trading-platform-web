@@ -18,6 +18,11 @@ export const getToken = () => {
     else return false
 }
 
+export const getUserId = () => {
+    const userId = Cookies.get(USER_ID)
+    if(userId) return userId
+    else return false
+}
 export const delToken = () => {
     Cookies.remove(TOKEN_KEY)
     Cookies.remove(USER_ID)
