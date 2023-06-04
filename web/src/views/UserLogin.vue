@@ -23,8 +23,9 @@
 import md5 from 'md5';
 import {defineComponent, reactive} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElCard } from 'element-plus';
-import {login} from "@/api/userlogin";
+import {getUserId, login} from "@/api/userlogin";
 import router from "@/router";
+import {getToken, setToken, setUserId} from "@/cookie";
 
 interface Form {
     userName: string;
@@ -70,15 +71,22 @@ export default defineComponent({
                     console.log(data);
 
                     //调用@api/login登陆
-                    login(data).then((res)=>{
+                    login(data).then(async (res) => {
                         console.log(res)
-                        if(res.code == 200) {
+                        if (res.code == 200) {
                             //登陆成功后需要保存token,并跳转
-                            localStorage.setItem("token",res.data.data)
+                            const token = res.data
+                            localStorage.setItem('token', token)
                             console.log(localStorage)
-                            router.push('/')
-                        }
-                        else {
+                            setToken(token, 1)
+                            console.log(getToken())
+                            const tokenData = {
+                                token : token
+                            }
+                            const userId = await getUserId(tokenData)
+                            setUserId(userId.data, 1)
+                            await router.push('/')
+                        } else {
                             alert("用户名或密码错误");
                         }
 
