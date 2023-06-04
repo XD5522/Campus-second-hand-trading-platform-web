@@ -12,4 +12,28 @@ export function GetCommentPage(id:number,pagesize:number,pagenum:number,state:st
             }
         })
     }
+    else if(state=="ER"){
+        return request({
+            method:"get",
+            url: `/comment/GetPersonComment`,
+            params:{
+                user_id : id,
+                PageSize : pagesize,
+                PageNum : pagenum,
+                State: "ER",
+            }
+        })
+    }
+    else{
+        return request({
+            method:"get",
+            url: `/comment/GetPersonComment`,
+            params:{
+                user_id : id,
+                PageSize : pagesize,
+                PageNum : pagenum,
+                State: "EE",
+            }
+        })
+    }
 }

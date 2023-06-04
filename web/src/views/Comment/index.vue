@@ -5,8 +5,8 @@
       <el-col :span="22">
         <div class="header-botton">
           <el-button type="primary" @click="ListPDComment">查看对商品评论历史</el-button>
-          <el-button type="primary" @click="ListSEComment">查看对商家评价历史</el-button>
-          <el-button type="primary" @click="ListBEComment">查看被评价历史</el-button>
+          <el-button type="primary" @click="ListSEComment">查看对他人评价</el-button>
+          <el-button type="primary" @click="ListBEComment">查看被他人评价</el-button>
           <div style="flex:1;"></div>
         </div>
       </el-col>
@@ -26,7 +26,7 @@
               <div style="height: 100%;text-align: left">{{ comment.content }}</div>
             </div>
             <div style="display: flex">
-              <div style="font-size: small;color: gray">{{comment.product_name}}</div>
+              <div style="font-size: small;color: gray" v-if="ShowProductName">{{comment.product_name}}</div>
               <div style="flex: 1"></div>
               <div style="font-size: small">{{ comment.time }}</div>
             </div>
@@ -64,6 +64,7 @@ const total = ref(1);
 const state = ref("PD");
 const router = useRouter();
 
+const ShowProductName =ref(true);
 const comments = ref<Comment[]>();
 const imgpath = "http://101.43.208.136:9090/mall/";
 //获取评论列表
@@ -88,12 +89,18 @@ function handlePageChange(page:number){
 
 function ListPDComment(){
   state.value="PD";
+  ShowProductName.value=true;
+  GetCommentList()
 }
 function ListSEComment(){
-  state.value="SE";
+  state.value="ER";
+  ShowProductName.value=false;
+  GetCommentList()
 }
 function ListBEComment(){
-  state.value="BE";
+  state.value="EE";
+  ShowProductName.value=false;
+  GetCommentList()
 }
 
 </script>
@@ -128,9 +135,6 @@ function ListBEComment(){
 .comment-card{
   background-color: #ffffff;;
   margin: 10px;
-
-
 }
-
 
 </style>
