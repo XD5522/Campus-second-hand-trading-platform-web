@@ -14,13 +14,11 @@
         <el-menu-item index="/about">全部商品</el-menu-item>
         <el-menu-item index="/about">搜索商品</el-menu-item>
         <div class="flex-grow"/>
-<!--TODO 头像还没写-->
-        <!--            <img src="./assets/Account-picture.png" >-->
-
+        <el-image style="height: 50px;border-radius: 50%" :src=user_img />
         <el-sub-menu>
 <!--TODO 这里要能获取用户的用户名-->
             <template #title>{{ user_name }}</template>
-            <el-menu-item index="/userzone">个人中心</el-menu-item>
+            <el-menu-item @click="GoToUserZone">个人中心</el-menu-item>
             <el-menu-item index="/history">历史订单</el-menu-item>
             <el-menu-item index="/comment">评价中心</el-menu-item>
             <el-menu-item index="/trading">交易中心</el-menu-item>
@@ -32,13 +30,21 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {getUserMsg} from "@/api/UserZone";
+import {getUserMsg} from "@/api/User";
+import {useRouter} from "vue-router";
 const user_id = ref(1);
 const user_name = ref();
-//TODO 获取用户id
+const user_img = ref();
+const router = useRouter();
+function GoToUserZone(){
+  router.push({path: '/userzone', query: {id: user_id.value}})
+}
+
 onBeforeMount(()=>{
+    //TODO 获取用户id
     getUserMsg(user_id.value).then(res=>{
       user_name.value = res.data.userName;
+      user_img.value = "http://101.43.208.136:9090/mall"+res.data.img;
     }).catch(err=>{
       console.log("error"+err)
     })
