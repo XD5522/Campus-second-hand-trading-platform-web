@@ -60,8 +60,8 @@ import Modal from "@/views/Order_History/components/Order.vue";
 
 const user_id = 1;
 //分页查询相关
-let current = 1;
-let total = 1;
+const current = ref(1);
+const total = ref();
 const pageSize = 10;
 let state = "all"
 //定义订单列表
@@ -73,34 +73,34 @@ onMounted(() => {
 
 //获取订单列表
 function GetOrderList(){
-  getOrderListById(user_id,pageSize,current,state).then(res=>{
+  getOrderListById(user_id,pageSize,current.value,state).then(res=>{
     OrderList.value=res.data.records
-    total=res.data.total;
-    current=res.data.current;
+    total.value=res.data.total;
+    current.value=res.data.current;
   }).catch(err=>{
     console.log("error"+err)
   })
 }
 //翻页
 function handlePageChange(page:number){
-  current = page
+  current.value = page
   GetOrderList()
 }
 
 //分类查看
 function ListAll(){
   state = "all"
-  current = 1
+  current.value = 1
   GetOrderList()
 }
 function Listfinish(){
   state = "finish"
-  current = 1
+  current.value = 1
   GetOrderList()
 }
 function ListUnfinished(){
   state = "unfinished"
-  current = 1
+  current.value = 1
   GetOrderList()
 }
 
@@ -128,7 +128,6 @@ defineComponent({
     margin-top: -76px;
     min-height: 100vh;
     display: flex;
-    position: relative;
     z-index: auto;
     flex-direction: column;
 }

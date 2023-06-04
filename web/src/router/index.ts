@@ -81,7 +81,7 @@ const routes: Array<RouteRecordRaw> = [
   {//评论中心页面
     path: '/comment',
     name: 'comment',
-    component:()=>import('@/views/Comment/Comment.vue')
+    component:()=>import('@/views/Comment/index.vue')
   },
   {//交易中心页面
     path: '/trading',

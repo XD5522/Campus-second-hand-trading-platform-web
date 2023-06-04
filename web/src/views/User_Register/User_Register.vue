@@ -22,8 +22,8 @@
                             <el-option label="女" value="女" />
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="银行卡号" prop="bankcard">
-                        <el-input v-model="registerForm.bankcard" placeholder="请输入银行卡号"></el-input>
+                    <el-form-item label="银行卡号" prop="bankCard">
+                        <el-input v-model="registerForm.bankCard" placeholder="请输入银行卡号"></el-input>
                     </el-form-item>
                     <el-form-item label="电子邮箱" prop="email">
                         <el-input v-model="registerForm.email" placeholder="请输入电子邮箱"></el-input>
@@ -62,7 +62,7 @@ const registerForm = ref<RegisterData>({
     city: '',
     phone: '',
     gender: '',
-    bankcard: '',
+    bankCard: '',
     email: '',
     password: '',
     checkpassword: ''
@@ -107,7 +107,7 @@ const rules = reactive<FormRules>({
     gender: [
         { required: true, message: '请选择性别', trigger: 'change'}
     ],
-    bankcard: [
+    bankCard: [
         { required: true, message: '请输入银行卡号', trigger: 'blur' }
     ],
     email: [
@@ -135,7 +135,7 @@ const register = (formEl: FormInstance | undefined) => {
                 city: registerForm.value.city,
                 phone: registerForm.value.phone,
                 gender: registerForm.value.gender,
-                bankcard: registerForm.value.bankcard,
+                bankCard: registerForm.value.bankCard,
                 email: registerForm.value.email,
                 password: md5password,
                 checkpassword: ''
