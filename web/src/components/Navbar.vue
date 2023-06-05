@@ -14,7 +14,7 @@
         <el-menu-item index="/about">全部商品</el-menu-item>
         <el-menu-item index="/about">搜索商品</el-menu-item>
         <div class="flex-grow"/>
-        <el-image style="height: 50px;border-radius: 50%" :src=user_img />
+        <el-image v-if="ISLogin" style="height: 50px;border-radius: 50%" :src=user_img />
         <el-menu-item v-if="!ISLogin" index="/userlogin">登陆</el-menu-item>
         <el-sub-menu v-if="ISLogin">
 <!--TODO 这里要能获取用户的用户名-->
@@ -24,7 +24,7 @@
             <el-menu-item index="/comment">评价中心</el-menu-item>
             <el-menu-item index="/trading">交易中心</el-menu-item>
             <el-menu-item index="2-3">购物车</el-menu-item>
-            <el-menu-item index="2-4">注销</el-menu-item>
+            <el-menu-item @click="LoginOut">注销</el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>
@@ -33,7 +33,7 @@
 import {onBeforeMount, ref} from "vue";
 import {getUserMsg} from "@/api/User";
 import {useRouter} from "vue-router";
-import {getUserId} from "@/api/cookie";
+import {delToken, getUserId} from "@/api/cookie";
 const user_id = ref(1);
 const user_name = ref();
 const user_img = ref();
@@ -57,6 +57,12 @@ onBeforeMount(()=>{
       console.log("error"+err)
     })
 })
+
+function LoginOut() {
+    delToken()
+    ISLogin.value = false
+}
+
 </script>
 
 <style scoped>
