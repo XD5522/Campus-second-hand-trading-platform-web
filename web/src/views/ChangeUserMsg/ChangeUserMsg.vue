@@ -60,6 +60,7 @@ import {ElButton, ElFormItem, ElMessage, FormInstance, FormRules} from "element-
 import {User} from "@/views/ChangeUserMsg/type/User";
 import {ChangeUserMsg, GetAllUserMsg} from "@/api/User";
 import {useRouter} from "vue-router";
+import {getUserId} from "@/api/cookie";
 
 const changeForm = ref<User>({
   id:0,
@@ -74,8 +75,7 @@ const changeForm = ref<User>({
   wechat:'',
   img:''
 });
-const user_id = ref(1);
-//TODO 从cookie中获取用户id
+const user_id = ref();
 
 const router = useRouter();
 onBeforeMount(()=>{
@@ -83,6 +83,8 @@ onBeforeMount(()=>{
 })
 //获取用户当前信息
 function getAllMsg(){
+  user_id.value = getUserId();
+  if(user_id.value==-1) router.push({path:"/userlogin"})
   GetAllUserMsg(user_id.value).then(res=>{
     changeForm.value = res.data;
   }).catch(err=>{

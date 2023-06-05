@@ -40,6 +40,7 @@
                     @click = "handleSearch"
                 />
             </el-select>
+            <el-button type="info" @click="handlePX">{{px}}</el-button>
 
         </el-col>
     </div>
@@ -117,14 +118,27 @@ const total = ref(0);
 const current = ref(1);
 const path = 'http://101.43.208.136:9090/mall';
 const fit = 'contain'
+const asc = ref("ASC")
+const px = ref("正序")
+function handlePX(){
+    if(px.value=="正序"){
+        px.value="倒序"
+        asc.value="DESC"
+    }
+    else{
+        px.value="正序"
+        asc.value="ASC"
+    }
+    handleSearch()
+}
 
 let route = useRoute()
 let router = useRouter()
 function handleSearch(){
-    search(searchText.value,value.value,current.value).then(res=>{
+    search(searchText.value,value.value,asc.value,current.value).then(res=>{
         products.value = res.data.records
         current.value=res.data.current
-        total.value=res.data.pages*10
+        total.value=res.data.pages*12
         console.log(total.value*10)
         console.log(res)
         console.log(products.value)
@@ -158,6 +172,9 @@ const options = [
 
 onMounted(()=>{
     searchText.value = String(route.query.searchText)
+    if(searchText.value=="undefined"){
+        searchText.value=""
+    }
     handleSearch()
 })
 
