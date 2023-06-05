@@ -39,6 +39,7 @@ let car = ref<Car>({
 import { ElMessageBox } from 'element-plus'
 import {Car} from "@/views/product/type/car";
 import {GetCommentPage} from "@/api/Comment";
+import {getUserId} from "@/api/cookie";
 
 function carFinish(){
     addCar()
@@ -115,7 +116,7 @@ const state = ref("PD");
 const ShowProductName =ref(true);
 const imgpath = "http://101.43.208.136:9090/mall/";
 function getComments(){
-    GetCommentPage(user_id.value,pageSize.value,current.value,state.value).then(res=>{
+    GetCommentPage(product.value.id,pageSize.value,current.value,state.value).then(res=>{
         comments.value = res.data.records;
         total.value = res.data.total;
     }).catch(err=>{

@@ -73,6 +73,14 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: false
     }
   },
+  {
+    path: '/car',
+    name: 'car',
+    component:()=> import('@/views/car/Index.vue'),
+    meta: {
+      hideNavbar: false
+    }
+  },
   {//历史订单页面
     path: '/history',
     name: 'history',

@@ -138,7 +138,7 @@ function handleSearch(){
     search(searchText.value,value.value,asc.value,current.value).then(res=>{
         products.value = res.data.records
         current.value=res.data.current
-        total.value=res.data.pages*10
+        total.value=res.data.pages*12
         console.log(total.value*10)
         console.log(res)
         console.log(products.value)
@@ -172,6 +172,9 @@ const options = [
 
 onMounted(()=>{
     searchText.value = String(route.query.searchText)
+    if(searchText.value=="undefined"){
+        searchText.value=""
+    }
     handleSearch()
 })
 

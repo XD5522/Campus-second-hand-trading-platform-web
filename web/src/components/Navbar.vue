@@ -12,7 +12,7 @@
         <div class="flex-grow"/>
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/about">全部商品</el-menu-item>
-        <el-menu-item index="/about">搜索商品</el-menu-item>
+        <el-menu-item index="/search">搜索商品</el-menu-item>
         <div class="flex-grow"/>
         <el-image style="height: 50px;border-radius: 50%" :src=user_img />
         <el-menu-item v-if="!ISLogin" index="/userlogin">登陆</el-menu-item>
