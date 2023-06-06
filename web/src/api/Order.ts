@@ -43,7 +43,7 @@ export function GetOrderDetail(order_id:number){
         method:"get",
         url: `/order/GetOrderDetail`,
         params:{
-            order_id:order_id
+            order_id:order_id,
         }
     })
 }

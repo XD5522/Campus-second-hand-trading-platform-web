@@ -100,6 +100,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/changeUserMsg',
     name: 'changeUserMsg',
     component:()=>import('@/views/ChangeUserMsg/ChangeUserMsg.vue')
+  },
+  {
+    path:'/order',
+    name:'order',
+    component:()=>import('@/views/Order/index.vue')
   }
 ]
 
