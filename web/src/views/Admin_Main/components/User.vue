@@ -15,19 +15,26 @@
     </div>
     <div class="dataForm">
         <el-card>
-            <el-table :data="userList" style="width: 100%">
+            <el-table
+                :data="userList"
+                :header-cell-style="{'text-align':'center'}"
+                :cell-style="{'text-align':'center'}"
+                border
+                style="width: 100%"
+            >
                 <el-table-column prop="id" label="ID" width="70px" />
                 <el-table-column prop="userName" label="用户名" width="150px" />
                 <el-table-column prop="name" label="姓名" width="100px" />
                 <el-table-column prop="type" label="用户类型" width="100px" />
                 <el-table-column prop="phone" label="手机号" width="200px"/>
                 <el-table-column prop="bankCard" label="银行卡号" width="200px"/>
-                <el-table-column prop="state" label="状态" />
+                <el-table-column prop="state" label="状态" width="100px"/>
                 <el-table-column label="操作">
                     <template #default="scope">
                         <el-button type="success" v-if="isAudit(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">通过</el-button>
                         <el-button type="danger"  v-if="!isBan(scope.row.state)" @click="banThisUser(scope.row.userName, scope.row.id)">封禁</el-button>
                         <el-button type="warning" v-if="isBan(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">解禁</el-button>
+                        <el-button type="info" @click="deleteThisUser(scope.row.userName, scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -37,7 +44,7 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {banUser, getAllUser, passUser} from "@/api/AdminGetData";
+import {banUser, deleteUser, getAllUser, passUser} from "@/api/AdminGetData";
 import {User} from "@/views/Admin_Main/type/User"
 
 const userList = ref<User[]>()
@@ -76,6 +83,16 @@ function banThisUser(userName : string, id : number) {
             userList.value[i].state = "封禁"
         }
     })
+}
+
+function deleteThisUser(userName : string, id : number) {
+    deleteUser(userName);
+    userList.value.forEach((item, i) => {
+        if(item.id == id) {
+            userList.value.splice(i, 1);
+        }
+    })
+
 }
 
 </script>

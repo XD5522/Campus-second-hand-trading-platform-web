@@ -30,3 +30,13 @@ export function banUser(data : string) {
         }
     })
 }
+
+export function deleteUser(data : string) {
+    return request({
+        url: '/admin/deleteUser',
+        method: 'post',
+        params: {
+            userName: data
+        }
+    })
+}
