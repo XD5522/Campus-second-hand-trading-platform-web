@@ -15,6 +15,7 @@
         <div class="flex-grow"/>
         <el-image v-if="ISLogin" style="height: 50px;border-radius: 50%; margin-top: 4px" :src=user_img />
         <el-menu-item v-if="!ISLogin" index="/userlogin">登陆</el-menu-item>
+        <el-menu-item v-if="!ISLogin" index="/userregister">注册</el-menu-item>
         <el-sub-menu v-if="ISLogin">
             <template #title>{{ user_name }}</template>
             <el-menu-item @click="GoToUserZone">个人中心</el-menu-item>
