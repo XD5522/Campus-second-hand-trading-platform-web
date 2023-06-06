@@ -70,7 +70,7 @@ export default defineComponent({
                     }
                     console.log(data);
 
-                    //调用@api/login登陆
+                    //调用user/login登陆
                     login(data).then(async (res) => {
                         console.log(res)
                         if (res.code == 200) {
