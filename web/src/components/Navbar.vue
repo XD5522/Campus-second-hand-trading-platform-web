@@ -7,7 +7,6 @@
             @select="handleSelect"
             router="true"
     >
-<!--TODO logo还没整-->
         <el-menu-item index="/about">LOGO</el-menu-item>
         <div class="flex-grow"/>
         <el-menu-item index="/">首页</el-menu-item>
