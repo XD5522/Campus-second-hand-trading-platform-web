@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {getAdminToken, getToken} from "@/api/cookie";
 
 const request = axios.create(
     {
@@ -7,6 +8,7 @@ const request = axios.create(
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
             'token':'',
+            'type':'',
         }
     }
 )
@@ -14,8 +16,13 @@ const request = axios.create(
 request.interceptors.request.use((config)=>{
     // @ts-ignore
     config.headers = config.headers || {}
-    if(localStorage.getItem('token')){//将token附加到请求中
-        config.headers.token = localStorage.getItem('token') || ''
+    if(getToken()){ //将token附加到请求中
+        config.headers.token = getToken() || ''
+        config.headers.type = 'user' || ''
+    }
+    else if(getAdminToken()) { // 获取到的是管理员的token，则类型改为管理员
+        config.headers.token = getAdminToken() || ''
+        config.headers.type = 'admin' || ''
     }
     return config
 })
