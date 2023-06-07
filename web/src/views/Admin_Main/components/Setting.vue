@@ -5,7 +5,7 @@
         :ellipsis="false"
         @select="handleSelect"
     >
-        <el-menu-item index="1">商品列表</el-menu-item>
+        <el-menu-item index="1">设置平台交易费用</el-menu-item>
         <div class="flex-grow" />
         <el-menu-item @click="LoginOut">退出登录</el-menu-item>
     </el-menu>

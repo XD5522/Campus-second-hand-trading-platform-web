@@ -7,8 +7,18 @@ import {User} from "@/views/Admin_Main/type/User";
 export function getAllUser() {
     return request({
         url: '/admin/getUserData',
-        method: 'get',
+        method: 'get'
     });
+}
+
+/**
+ *  获取待审核的用户信息
+ */
+export function getAuditUser() {
+    return request({
+        url: '/admin/getAuditUserData',
+        method: 'get'
+    })
 }
 
 export function passUser(data : string) {

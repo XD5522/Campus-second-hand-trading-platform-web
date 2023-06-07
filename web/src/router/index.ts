@@ -37,6 +37,21 @@ const routes: Array<RouteRecordRaw> = [
         component:()=> import('../views/Admin_Main/components/Main.vue')
       },
       {
+        path: 'userAudit',
+        name: 'userAudit',
+        component:()=> import('../views/Admin_Main/components/User_Audit.vue')
+      },
+      {
+        path: 'merchantAudit',
+        name: 'MerchantAudit',
+        component:()=> import('../views/Admin_Main/components/Merchant_Audit.vue')
+      },
+      {
+        path: 'goodsAudit',
+        name: 'GoodsAudit',
+        component:()=> import('../views/Admin_Main/components/Goods_Audit.vue')
+      },
+      {
         path: 'user',
         name: 'user',
         component:()=> import('../views/Admin_Main/components/User.vue')
@@ -45,6 +60,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'goods',
         name: 'goods',
         component:()=> import('../views/Admin_Main/components/Product.vue')
+      },
+      {
+        path: 'setting',
+        name: 'setting',
+        component:()=> import('../views/Admin_Main/components/Setting.vue')
       }
     ]
   },

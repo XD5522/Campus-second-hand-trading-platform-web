@@ -23,6 +23,12 @@ export const getToken = () => {
     else return false
 }
 
+export const getAdminToken = () => {
+    const token = Cookies.get(TOKEN_ADMIN)
+    if (token) return token
+    else return false
+}
+
 export const getUserId = () => {
     const userId =parseInt(Cookies.get(USER_ID),10)
     if(userId) return userId

@@ -26,9 +26,9 @@
                                     <el-icon><Warning /></el-icon>
                                     <span>待审核信息列表</span>
                                 </template>
-                                <el-menu-item index="1-1">用户注册列表</el-menu-item>
-                                <el-menu-item index="1-2">商家注册列表</el-menu-item>
-                                <el-menu-item index="1-3">发布商品列表</el-menu-item>
+                                <el-menu-item index="/AdminMain/userAudit">用户注册列表</el-menu-item>
+                                <el-menu-item index="/AdminMain/merchantAudit">商家注册列表</el-menu-item>
+                                <el-menu-item index="/AdminMain/goodsAudit">发布商品列表</el-menu-item>
                             </el-sub-menu>
                             <el-menu-item index="/AdminMain/user">
                                 <el-icon><User /></el-icon>
@@ -38,7 +38,7 @@
                                 <el-icon><Goods /></el-icon>
                                 <span>管理商品列表</span>
                             </el-menu-item>
-                            <el-menu-item index="4">
+                            <el-menu-item index="/AdminMain/setting">
                                 <el-icon><Setting /></el-icon>
                                 <span>设置平台交易费用</span>
                             </el-menu-item>
