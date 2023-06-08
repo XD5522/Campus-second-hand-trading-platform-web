@@ -80,10 +80,7 @@ export default defineComponent({
                             console.log(localStorage)
                             setToken(token, 1)
                             console.log(getToken())
-                            const tokenData = {
-                                token : token
-                            }
-                            const userId = await getUserId(tokenData)
+                            const userId = await getUserId(token)
                             setUserId(userId.data, 1)
                             await router.push('/')
                         } else {
