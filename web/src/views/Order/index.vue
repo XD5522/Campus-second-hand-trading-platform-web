@@ -26,6 +26,14 @@
           </div>
           <div style="font-size: 20px;margin-top: 10px">当前订单状态:{{ order.state }}</div>
 
+          <div style="display: flex">
+            <div style="flex:5;"></div>
+            <el-button type="primary" v-if="IsReceived" @click="ReceivedProduct">确认收货</el-button>
+            <el-button type="primary" v-if="IsCancel" @click="CancelOD">取消订单</el-button>
+            <el-button type="primary" v-if="IsReturn" @click="ReturnProduct">申请退货</el-button>
+            <div style="flex:1"></div>
+          </div>
+
           <div style="display: flex;align-items: flex-end;">
             <div style="font-size: 20px;margin-top: 20px;">订单信息:</div>
           </div>
@@ -62,7 +70,7 @@
 
           <div style="display: flex;margin-top: 5px">
             <div style="flex: 1;"></div>
-            <el-card style="flex: 4" @click="" class="hover">
+            <el-card style="flex: 4" @click="GotoProductDetail" class="hover">
               <div style="display: flex;margin-top: 10px;flex-direction: row">
                 <div style="flex: 1"></div>
                 <div style="text-align: left">
@@ -105,6 +113,8 @@
             </div>
             <div style="flex: 1"></div>
           </div>
+
+
         </div>
       </el-col>
     </el-main>
@@ -117,8 +127,9 @@ import {getUserId} from "@/api/cookie";
 import {useRouter} from "vue-router";
 import {Comment} from "@/views/Comment/type/Comment";
 import {Detail} from "@/views/Order/type/detail";
-import {GetOrderDetail} from "@/api/Order";
+import {CancelOrder, finishOrder, GetOrderDetail, ReturnPD} from "@/api/Order";
 import {GetComment} from "@/api/Comment";
+import {ElMessage} from "element-plus";
 
 const user_id = ref();
 const order_id = ref(-1);
@@ -127,6 +138,9 @@ const active = ref(3);
 const comment = ref<Comment>();
 const active_comment = ref(false)
 const IsMounted = ref(false)
+const IsReceived = ref(false)
+const IsCancel = ref(false)
+const IsReturn = ref(false)
 const imgpath = ref("http://101.43.208.136:9090/mall")
 
 const order = ref<Detail>()
@@ -137,18 +151,56 @@ onMounted(() => {
     useRouter().push({path: '/userlogin'})
   }
   GetOrderDetail(order_id.value).then(res => {
+    console.log(res)
     order.value = res.data
+    console.log(order.value)
     GetComment(user_id.value, order.value.product_id).then(res => {
       comment.value = res.data;
       if (comment.value.id != null) {
         active_comment.value = true;
       }
+
+      //更新progress
+      if (order.value.state == "已完成") {
+        active.value = 4;
+      } else if (order.value.state == "已发货") {
+        active.value = 3;
+        IsReceived.value = true;
+      } else if (order.value.state == "未发货") {
+        active.value = 2;
+        IsCancel.value = true;
+      }else{
+        active.value =1;
+      }
     })
   })
-
   IsMounted.value = true;
 })
 
+function ReceivedProduct(){
+  finishOrder(order.value.id).then(res=>{
+    ElMessage.success("收货成功")
+    IsReceived.value = false;
+  })
+}
+
+function CancelOD(){
+  CancelOrder(order.value.id).then(res=>{
+    ElMessage.success("取消成功")
+    IsCancel.value = false;
+  })
+}
+
+function ReturnProduct(){
+  ReturnPD(order.value.id).then(res=>{
+    ElMessage.success("退货成功")
+    IsReturn.value = false;
+  })
+}
+
+function GotoProductDetail(){
+  r.push({})//TODO 跳转到商品详情
+}
 
 </script>
 
@@ -171,9 +223,6 @@ onMounted(() => {
 //background-color: #2c3e50;
 }
 
-.header-botton {
-//background-color: #42b983; height: 100%; width: 100%; display: flex; border-bottom: 2px solid gray;
-}
 
 .main {
   padding: 0px;

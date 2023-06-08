@@ -47,3 +47,33 @@ export function GetOrderDetail(order_id:number){
         }
     })
 }
+
+export function finishOrder(order_id:number) {
+    return request({
+        method:"get",
+        url: `/order/finishOrder`,
+        params:{
+            order_id:order_id,
+        }
+    })
+}
+
+export function CancelOrder(order_id:number){
+    return request({
+        method:"get",
+        url: `/order/cancelOrder`,
+        params:{
+            order_id:order_id,
+        }
+    })
+}
+
+export function ReturnPD(order_id:number){
+    return request({
+        method:"get",
+        url: `/order/returnProduct`,
+        params:{
+            order_id:order_id,
+        }
+    })
+}
