@@ -22,7 +22,7 @@
             <el-menu-item index="/history">历史订单</el-menu-item>
             <el-menu-item index="/comment">评价中心</el-menu-item>
             <el-menu-item index="/trading">交易中心</el-menu-item>
-            <el-menu-item index="2-3">购物车</el-menu-item>
+            <el-menu-item index="/car">购物车</el-menu-item>
             <el-menu-item @click="LoginOut">注销</el-menu-item>
         </el-sub-menu>
     </el-menu>

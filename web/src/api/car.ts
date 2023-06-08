@@ -12,6 +12,14 @@ export function getCar(current:number){
     })
 }
 
+export function getCarByIds(ids:number[]){
+    return request({
+        method:"post",
+        url: "/car/getCarByIds",
+        data:ids
+    })
+}
+
 export function upCar(id:number,num:number){
     return request({
         method:"post",

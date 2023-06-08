@@ -38,7 +38,7 @@ let car = ref<Car>({
 
 import { ElMessageBox } from 'element-plus'
 import {Car} from "@/views/product/type/car";
-import {GetCommentPage} from "@/api/Comment";
+import { GetProductComments} from "@/api/Comment";
 import {getUserId} from "@/api/cookie";
 
 function carFinish(){
@@ -69,6 +69,7 @@ function getProduct(){
         console.log(product.value)
         car.value.productId=product.value.id
         mounted.value=true;
+        getComments()
     }).catch(err=>{
         console.log("err"+err)
     })
@@ -86,7 +87,6 @@ function addCar(){
 
 onMounted(()=>{
     getProduct()
-    getComments()
 })
 
 
@@ -112,13 +112,14 @@ const user_id = ref(1);
 const current = ref(1);//当前页面
 const pageSize = ref(5);
 const total = ref(1);
-const state = ref("PD");
 const ShowProductName =ref(true);
 const imgpath = "http://101.43.208.136:9090/mall/";
 function getComments(){
-    GetCommentPage(product.value.id,pageSize.value,current.value,state.value).then(res=>{
+    GetProductComments(product.value.id,current.value,pageSize.value).then(res=>{
         comments.value = res.data.records;
         total.value = res.data.total;
+        console.log(comments.value)
+        console.log(res)
     }).catch(err=>{
         console.log("error"+err)
     })
@@ -151,7 +152,7 @@ function handlePageChange(page:number){
 
                     <br/>
                     <div>
-                        <span>{{product.intro}}</span>
+                        <span>商品介绍：{{product.intro}}</span>
                     </div>
 
                     <br/>
@@ -167,8 +168,11 @@ function handlePageChange(page:number){
                     <div>
                         <span>商品尺寸：{{product.size}}</span>
                     </div>
-
-
+                    <br/>
+                    <div>
+                        <span>交易方式：{{product.trading}}</span>
+                    </div>
+                    <br/>
                     <div style="float: left;">
                         <el-input-number v-model="car.num" :min="1" :max="10"/>
                     </div>
@@ -212,7 +216,7 @@ function handlePageChange(page:number){
 
         </div>
         <div >
-            <span style="color: #666666">——————————————————————————————————————————————————————————————————————————————————</span>
+            <el-divider/>
         </div>
         <div style="margin-top: 30px">
             <el-col :span="22" :push="1" >

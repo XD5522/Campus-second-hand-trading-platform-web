@@ -4,6 +4,7 @@ import {deleteCar, getCar, upCar} from "@/api/car";
 import {Car} from "@/views/car/type/car";
 import { ElTable } from 'element-plus'
 import { Car as carDto } from "@/views/product/type/car";
+import {useRoute, useRouter} from "vue-router";
 
 const current = ref(1)
 const carList = ref<Car[]>()
@@ -16,6 +17,8 @@ const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<Car[]>([])
 const ids = ref<number[]>()
 const carDto = ref<carDto>({productId:0,userId:0,num:0,})
+let route = useRoute()
+let router = useRouter()
 
 const handleSelectionChange = (val: Car[]) => {
     multipleSelection.value = val
@@ -40,6 +43,15 @@ function getCarList(){
   })
 }
 
+function carPayment(){
+    ids.value = multipleSelection.value.map(car => car.id);
+    console.log(ids.value)
+    router.push({
+        path:'/pay',
+        query: {cars:ids.value}
+    })
+}
+
 onMounted(()=>{
     getCarList()
 
@@ -61,7 +73,7 @@ onMounted(()=>{
           />
 
       </div>
-          <el-button type="primary">
+          <el-button type="primary" @click="carPayment">
             结算
           </el-button>
 

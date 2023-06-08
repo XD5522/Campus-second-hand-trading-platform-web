@@ -81,6 +81,23 @@ const routes: Array<RouteRecordRaw> = [
       hideNavbar: false
     }
   },
+  {
+    path: '/pay',
+    name: 'pay',
+    component:()=> import('@/views/pay/Index.vue'),
+    meta: {
+      hideNavbar: false
+    }
+  },
+  {
+    path: '/wallet',
+    name: 'wallet',
+    component:()=> import('@/views/wallet/Index.vue'),
+    meta: {
+      hideNavbar: false
+    }
+  },
+
   {//历史订单页面
     path: '/history',
     name: 'history',
