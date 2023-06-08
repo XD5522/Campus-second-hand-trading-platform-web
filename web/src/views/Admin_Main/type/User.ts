@@ -4,8 +4,8 @@ export interface User {
     name : string
     type : string
     state : string
-    phone : string
-    bankCard : string
+    city : string
+    img : string
 }
 
 export interface SelectData {
@@ -14,7 +14,7 @@ export interface SelectData {
     pagesize : number
 }
 
-export class InitData {
+export class InitUserData {
     pageData : SelectData = {
         page : 1,
         count : 0,

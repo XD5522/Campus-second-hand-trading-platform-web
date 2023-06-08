@@ -19,13 +19,13 @@
                     </div>
                     <div>
                         <el-button @click="resetForm(searchFormRef)">重置</el-button>
-                        <el-button type="primary">搜索</el-button>
+                        <el-button type="primary" @click="searchData">搜索</el-button>
                     </div>
                 </div>
             </template>
             <div class="search-form">
                 <el-form ref="searchFormRef" :model="searchForm">
-                    <el-form-item label="输入搜索：" prop="search">
+                    <el-form-item label="用户名：" prop="search">
                         <el-input style="width: 20%" v-model="searchForm.search"></el-input>
                     </el-form-item>
                 </el-form>
@@ -45,10 +45,23 @@
                 <el-table-column prop="userName" label="用户名" width="150px" />
                 <el-table-column prop="name" label="姓名" width="100px" />
                 <el-table-column prop="type" label="用户类型" width="100px" />
-                <el-table-column prop="phone" label="手机号" width="200px"/>
-                <el-table-column prop="bankCard" label="银行卡号" width="200px"/>
+                <el-table-column prop="city" label="城市" width="100px"/>
+                <el-table-column prop="img" label="图片" width="200px">
+                    <template v-slot="scope">
+                        <div>
+                            <el-image
+                                style="width: 100px; height: 100px"
+                                :src="imgpath+scope.row.img"
+                                :preview-src-list="[imgpath+scope.row.img]"
+                                :hide-on-click-modal="true"
+                                :preview-teleported="true"
+                            >
+                            </el-image>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="state" label="状态" width="100px"/>
-                <el-table-column label="操作" width="334px">
+                <el-table-column label="操作" width="434px">
                     <template #default="scope">
                         <el-button type="danger"  v-if="!isBan(scope.row.state)" @click="banThisUser(scope.row.userName, scope.row.id)">封禁</el-button>
                         <el-button type="warning" v-if="isBan(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">解禁</el-button>
@@ -68,9 +81,9 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onBeforeMount, reactive, ref} from "vue";
-import {banUser, deleteUser, getAllUser, passUser} from "@/api/AdminGetData";
-import {InitData} from "@/views/Admin_Main/type/User"
+import {computed, onBeforeMount, reactive, ref, watch} from "vue";
+import {banUser, deleteUser, getAllUser, passUser, searchUser} from "@/api/AdminGetData";
+import {InitUserData, User} from "@/views/Admin_Main/type/User"
 import {delAdminToken} from "@/api/cookie";
 import router from "@/router";
 import {
@@ -78,7 +91,7 @@ import {
 } from '@element-plus/icons-vue'
 import {FormInstance} from "element-plus";
 
-const data = reactive(new InitData())
+const data = reactive(new InitUserData())
 const dataList = reactive({
     List: computed(() => {
         return data.list.slice(
@@ -94,6 +107,8 @@ const searchForm = ref({
 
 const searchFormRef = ref<FormInstance>()
 
+const imgpath = "http://101.43.208.136:9090/mall"
+
 function LoginOut() {
     delAdminToken()
     router.push('/AdminLogin')
@@ -103,16 +118,14 @@ onBeforeMount(() => {
     getAllUser().then((res) => {
         data.list = res.data
         data.pageData.count = res.data.length
-        console.log(data.pageData.count)
-        console.log(data.list)
     })
 })
 
 
 
 const isBan = (state : string) => {
-    if(state == "正常") return false
-    return true
+    return state != "正常";
+
 }
 
 function passThisUser(userName : string, id : number) {
@@ -140,7 +153,6 @@ function deleteThisUser(userName : string, id : number) {
             data.list.splice(i, 1);
         }
     })
-
 }
 
 const sizeChange = (pagesize : number) => {
@@ -149,12 +161,30 @@ const sizeChange = (pagesize : number) => {
 
 const currentChange = (page : number) => {
     data.pageData.page = page
+    searchData()
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
 }
+
+function searchData() {
+    searchUser(searchForm.value.search, data.pageData.page, data.pageData.pagesize).then((res) => {
+        console.log(res)
+        data.list = res.data
+        data.pageData.count = res.data.length
+    })
+}
+
+watch([() => searchForm.value.search], () => {
+    if(searchForm.value.search == '') {
+        getAllUser().then((res) => {
+            data.list = res.data
+            data.pageData.count = res.data.length
+        })
+    }
+})
 
 </script>
 
