@@ -35,14 +35,14 @@
     <div class="dataForm">
         <el-card style="margin: 20px">
             <el-table
-                :data="dataList.List"
+                :data="data.list"
                 :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}"
                 border
                 style="width: 100%"
             >
                 <el-table-column prop="id" label="ID" width="70px" />
-                <el-table-column prop="userName" label="用户名" width="150px" />
+                <el-table-column prop="userName" label="用户名" width="125px" />
                 <el-table-column prop="name" label="姓名" width="100px" />
                 <el-table-column prop="type" label="用户类型" width="100px" />
                 <el-table-column prop="city" label="城市" width="100px"/>
@@ -60,12 +60,27 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="license" label="营业执照" width="200px">
+                    <template v-slot="scope">
+                        <div>
+                            <el-image
+                                style="width: 100px; height: 100px"
+                                :src="imgpath+scope.row.license"
+                                :preview-src-list="[imgpath+scope.row.license]"
+                                :hide-on-click-modal="true"
+                                :preview-teleported="true"
+                            >
+                            </el-image>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="state" label="状态" width="100px"/>
-                <el-table-column label="操作" width="434px">
+                <el-table-column label="操作" width="243px">
                     <template #default="scope">
                         <el-button type="danger"  v-if="!isBan(scope.row.state)" @click="banThisUser(scope.row.userName, scope.row.id)">封禁</el-button>
                         <el-button type="warning" v-if="isBan(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">解禁</el-button>
                         <el-button type="info" @click="deleteThisUser(scope.row.userName, scope.row.id)">删除</el-button>
+                        <el-button type="primary">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -92,14 +107,6 @@ import {
 import {FormInstance} from "element-plus";
 
 const data = reactive(new InitUserData())
-const dataList = reactive({
-    List: computed(() => {
-        return data.list.slice(
-            (data.pageData.page - 1) * data.pageData.pagesize,
-            data.pageData.page * data.pageData.pagesize
-        )
-    })
-})
 
 const searchForm = ref({
     search : ''

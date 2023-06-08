@@ -83,12 +83,13 @@
 import {delAdminToken} from "@/api/cookie";
 import router from "@/router";
 import {FormInstance} from "element-plus";
-import {InitProjectData} from "@/views/Admin_Main/type/Project";
+import {InitProjectData, Product} from "@/views/Admin_Main/type/Project";
 import {onMounted, reactive, ref, watch} from "vue";
 import {deleteUser, searchProject} from "@/api/AdminGetData";
 import {
     Search
 } from '@element-plus/icons-vue'
+import {User} from "@/views/Admin_Main/type/User";
 
 const data = reactive(new InitProjectData())
 
@@ -127,6 +128,7 @@ function searchData() {
         data.pageData.pagesize = res.data.size
         console.log(data)
         console.log(res)
+        filterAudit()
     }).catch((err) => {
         console.log("error"+err)
     })
@@ -146,6 +148,16 @@ function deleteThisProject(name : string, id : number) {
     // deleteProject(name);
     searchData()
 }
+
+function filterAudit() {
+    let temp: Product[] = []
+    temp = data.list.filter((value) => {
+        return value.state.indexOf("audit") != -1;
+    })
+    data.list = temp
+    data.pageData.count = temp.length
+}
+
 </script>
 
 <style>

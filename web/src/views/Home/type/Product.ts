@@ -1,8 +1,38 @@
-export interface Product {
-    img: string,     //商品图片连接
-    name: string,       //商品名称,不超过20个字
-    intro: string,      //商品介绍,不超过50个字
-    price: number,      //商品价格,不能小于等于0
-    his_sales: number,  //商品历史销量
-    star: number,       //商品评分
+import {User} from "@/views/Admin_Main/type/User";
+
+export interface Product{
+    id: number;
+    userId: number;
+    userName: string;
+    name: string;
+    intro: string;
+    price: number;
+    stock: number;
+    hisSales: number;
+    size: string;
+    type: string;
+    star: number;
+    trading: string;
+    state: string;
+    img: string;
+}
+
+export interface SelectData {
+    page : number
+    count : number
+    pagesize : number
+    order : string
+
+    asc : string
+}
+
+export class InitProjectData {
+    pageData : SelectData = {
+        page : 1,
+        count : 0,
+        pagesize : 6,
+        order : 'price',
+        asc : 'ASC'
+    }
+    list : Product[]=[]
 }

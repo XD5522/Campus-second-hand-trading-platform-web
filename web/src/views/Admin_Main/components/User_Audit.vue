@@ -36,7 +36,7 @@
     <div class="dataForm">
         <el-card style="margin: 20px">
             <el-table
-                :data="dataList.List"
+                :data="data.list"
                 :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}"
                 border
@@ -75,7 +75,8 @@
                 @size-change="sizeChange"
                 @current-change="currentChange"
                 layout="prev, pager, next"
-                :total="data.pageData.count">
+                :total="data.pageData.count"
+            >
             </el-pagination>
         </el-card>
     </div>
@@ -93,14 +94,7 @@ import {
 } from '@element-plus/icons-vue'
 
 const data = reactive(new InitUserData())
-const dataList = reactive({
-    List: computed(() => {
-        return data.list.slice(
-            (data.pageData.page - 1) * data.pageData.pagesize,
-            data.pageData.page * data.pageData.pagesize
-        )
-    })
-})
+const imgpath = "http://101.43.208.136:9090/mall"
 
 const searchForm = ref({
     search : ''
