@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/Home/HomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  {
+  {//首页
     path: '/',
     name: 'home',
     component: HomeView
@@ -26,7 +26,47 @@ const routes: Array<RouteRecordRaw> = [
   {//管理员主界面
     path: '/AdminMain',
     name : 'AdminMain',
-    component: () => import('../views/AdminMain.vue')
+    component: () => import('../views/Admin_Main/AdminMain.vue'),
+    meta: {
+      hideNavbar: true
+    },
+    children: [
+      {
+        path: 'main',
+        name: 'main',
+        component:()=> import('../views/Admin_Main/components/Main.vue')
+      },
+      {
+        path: 'userAudit',
+        name: 'userAudit',
+        component:()=> import('../views/Admin_Main/components/User_Audit.vue')
+      },
+      {
+        path: 'merchantAudit',
+        name: 'MerchantAudit',
+        component:()=> import('../views/Admin_Main/components/Merchant_Audit.vue')
+      },
+      {
+        path: 'goodsAudit',
+        name: 'GoodsAudit',
+        component:()=> import('../views/Admin_Main/components/Goods_Audit.vue')
+      },
+      {
+        path: 'user',
+        name: 'user',
+        component:()=> import('../views/Admin_Main/components/User.vue')
+      },
+      {
+        path: 'goods',
+        name: 'goods',
+        component:()=> import('../views/Admin_Main/components/Product.vue')
+      },
+      {
+        path: 'setting',
+        name: 'setting',
+        component:()=> import('../views/Admin_Main/components/Setting.vue')
+      }
+    ]
   },
   {//功能测试页面
     path: '/test',
@@ -117,6 +157,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/changeUserMsg',
     name: 'changeUserMsg',
     component:()=>import('@/views/ChangeUserMsg/ChangeUserMsg.vue')
+  },
+  {
+    path:'/order',
+    name:'order',
+    component:()=>import('@/views/Order/index.vue')
   }
 ]
 

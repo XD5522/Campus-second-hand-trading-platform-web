@@ -53,6 +53,8 @@ import {defineComponent, onBeforeMount, onMounted, ref} from "vue";
 import {getOrderListById} from "@/api/Order";
 import {getUserId} from "@/api/cookie";
 import {useRouter} from "vue-router";
+import Router from "@/router";
+import router from "@/router";
 
 
 const user_id = ref();
@@ -60,21 +62,22 @@ const user_id = ref();
 const current = ref(1);
 const total = ref();
 const pageSize = 10;
-let state = "all"
+const state = ref("all");
 //定义订单列表
 const OrderList = ref<Order[]>();
+const r = useRouter();//声明router
 
 onBeforeMount(() => {
   user_id.value = getUserId();
   if(user_id.value==-1){
-    useRouter().push({path: '/userlogin'})
+    r.push({path: '/userlogin'})
   }
   GetOrderList()
 })
 
 //获取订单列表
 function GetOrderList(){
-  getOrderListById(user_id.value,pageSize,current.value,state).then(res=>{
+  getOrderListById(user_id.value,pageSize,current.value,state.value).then(res=>{
     OrderList.value=res.data.records
     total.value=res.data.total;
     current.value=res.data.current;
@@ -90,29 +93,25 @@ function handlePageChange(page:number){
 
 //分类查看
 function ListAll(){
-  state = "all"
+  state.value = "all"
   current.value = 1
   GetOrderList()
 }
 function Listfinish(){
-  state = "finish"
+  state.value = "finish"
   current.value = 1
   GetOrderList()
 }
 function ListUnfinished(){
-  state = "unfinished"
+  state.value = "unfinished"
   current.value = 1
   GetOrderList()
 }
 
 //行点击事件
-const visible = ref(false);
-const title = ref("订单详情")
-let order_id = 1;
+
 const handleRowClick = (row:Order) => {
-  console.log('点击的行数据:', row);
-  order_id = row.id;
-  visible.value=true;
+  r.push({path:"/order", query: {id: row.id}})
 };
 
 </script>

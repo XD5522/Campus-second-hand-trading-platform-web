@@ -37,6 +37,17 @@ export function GetCommentPage(id:number,pagesize:number,pagenum:number,state:st
         })
     }
 }
+export function GetComment(user_id:number,product_id:number){
+    return request({
+        method:"get",
+        url: `/comment/GetOrderComment`,
+        params:{
+            user_id:user_id,
+            product_id:product_id,
+        }
+    })
+}
+
 
 export function GetProductComments(id:number,pagesize:number,pagenum:number) {
     return request({

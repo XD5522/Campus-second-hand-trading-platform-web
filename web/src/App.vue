@@ -3,15 +3,18 @@
         <navbar></navbar>
     </el-header>
     <router-view/>
+
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import Navbar from '@/components/Navbar.vue'
+import HelloWorld from './components/HelloWorld.vue'
 
 export default defineComponent({
     components: {
-        Navbar // 注册导航栏组件
+        Navbar, // 注册导航栏组件
+        HelloWorld
     },
     data() {
         return {

@@ -102,13 +102,17 @@ const rules = reactive<FormRules>({
         { required: true, message: '请输入城市', trigger: 'blur' }
     ],
     phone: [
-        { required: true, message: '请输入手机号', trigger: 'blur' }
+        { required: true, message: '请输入手机号', trigger: 'blur' },
+        { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur'},
+        { pattern: /^[0-9]*$/, message: '手机号必须为数字', trigger: 'blur'}
     ],
     gender: [
         { required: true, message: '请选择性别', trigger: 'change'}
     ],
     bankCard: [
-        { required: true, message: '请输入银行卡号', trigger: 'blur' }
+        { required: true, message: '请输入银行卡号', trigger: 'blur' },
+        { min: 16, max: 16, message: '银行卡号长度为16位', trigger: 'blur'},
+        { pattern: /^[0-9]*$/, message: '银行卡号必须为数字', trigger: 'blur'}
     ],
     email: [
         { required: true, message: '请输入电子邮箱', trigger: 'blur' },

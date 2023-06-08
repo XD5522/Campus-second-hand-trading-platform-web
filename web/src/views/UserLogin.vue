@@ -70,7 +70,7 @@ export default defineComponent({
                     }
                     console.log(data);
 
-                    //调用@api/login登陆
+                    //调用user/login登陆
                     login(data).then(async (res) => {
                         console.log(res)
                         if (res.code == 200) {
@@ -80,10 +80,7 @@ export default defineComponent({
                             console.log(localStorage)
                             setToken(token, 1)
                             console.log(getToken())
-                            const tokenData = {
-                                token : token
-                            }
-                            const userId = await getUserId(tokenData)
+                            const userId = await getUserId(token)
                             setUserId(userId.data, 1)
                             await router.push('/')
                         } else {

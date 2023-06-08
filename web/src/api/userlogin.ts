@@ -5,10 +5,6 @@ interface loginData{
     userPassword:string
 }
 
-interface TokenData{
-    token:string
-}
-
 /**
  * 普通用户的登陆方法
  * @param data
@@ -25,10 +21,12 @@ export function login(data: loginData) {
  * 获取用户信息
  */
 
-export function getUserId(data : TokenData) {
+export function getUserId(data : string) {
     return request({
         url: '/user/getUserInfo',
         method: 'post',
-        data: data // 传入Token
+        params: {
+            token: data
+        } // 传入Token
     })
 }
