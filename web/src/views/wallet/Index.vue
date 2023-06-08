@@ -4,6 +4,7 @@ import Options from 'vue-class-component';
 import {getmoney, getMoneyRecord, getUser, incomeRecord, payoutRecord, recharge, rechargeRecord} from "@/api/wallet";
 import {ElMessageBox} from "element-plus";
 import {product} from "@/views/product/type/Product";
+import {useRoute, useRouter} from "vue-router";
 
 interface User{
     id : number;
@@ -63,6 +64,8 @@ function getUserWallet(){
       console.log(err)
   })
 }
+const router = useRouter()
+const route = useRoute()
 
 
 onMounted(()=>{
@@ -127,6 +130,9 @@ function getMonRecord(){
         records.value=res.data
     })
 }
+function orderIntro(id:number){
+    router.push({path: '/order', query: {id: id}});
+}
 
 const addMoney = ref(false);
 const num = ref(0.0)
@@ -166,7 +172,7 @@ const type = ref(false)
                   <el-table-column prop="time" label="Date" width="180" />
                   <el-table-column prop="value" label="Name" width="180" />
                   <el-table-column  label="详情" v-if="type">
-                      <template #default="scope"><el-button type="primary">详情</el-button></template>
+                      <template #default="scope"><el-button type="primary" @click="orderIntro(scope.row.id)">详情</el-button></template>
                   </el-table-column>
               </el-table>
           </div>
