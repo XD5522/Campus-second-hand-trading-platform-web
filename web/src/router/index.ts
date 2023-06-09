@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/Home/HomeView.vue'
+import {getAdminToken, getToken} from "@/api/cookie";
 
 const routes: Array<RouteRecordRaw> = [
   {//首页
@@ -168,6 +169,31 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  console.log(from)
+  if(to.path == '/' || to.path == '/userlogin' || to.path == '/AdminLogin' || to.path == '/userregister') {
+    next()
+  }
+  else if(to.path == '/AdminMain/main' || to.path == '/AdminMain') {
+    const token: string | boolean = getAdminToken()
+    if(!token) {
+      next('/AdminLogin')
+    }
+    else {
+      next()
+    }
+  }
+  else {
+    const token: string | boolean = getToken()
+    if(!token) {
+      next('/userlogin')
+    }
+    else {
+      next()
+    }
+  }
 })
 
 export default router

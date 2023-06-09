@@ -50,7 +50,7 @@ import { Options, Vue } from 'vue-class-component';
 import HelloWorld from '@/components/HelloWorld.vue';
 import {onMounted, reactive} from "vue";
 import {InitProjectData} from "@/views/Home/type/Product";
-import {searchProject} from "@/api/AdminGetData";
+import {searchProduct} from "@/api/main";
 import router from "@/router";
 import {
     Sunny
@@ -68,7 +68,7 @@ const imgList = [
 ]
 
 onMounted(() => {
-    searchProject("", data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
+    searchProduct("", data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
         data.list = res.data.records
         data.pageData.page = res.data.current
         data.pageData.count = res.data.total

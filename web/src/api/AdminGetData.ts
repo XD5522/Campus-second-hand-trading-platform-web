@@ -88,7 +88,7 @@ export function deleteUser(data : string) {
 export function searchProduct(name : String, order : String, asc : String, current : number, size : number) {
     return request({
         method:"get",
-        url: `/admin/searchProduct`,
+        url: '/admin/searchProduct',
         params: {
             name : name,
             current : current,
