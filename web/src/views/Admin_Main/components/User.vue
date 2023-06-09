@@ -181,12 +181,11 @@ function banThisUser(userName : string, id : number) {
     })
 }
 
-function deleteThisUser(userName : string, id : number) {
-    deleteUser(userName);
-    data.list.forEach((item, i) => {
-        if(item.id == id) {
-            data.list.splice(i, 1);
-        }
+async function deleteThisUser(userName: string, id: number) {
+    await deleteUser(userName);
+    await getAllUser().then((res) => {
+        data.list = res.data
+        data.pageData.count = res.data.length
     })
 }
 

@@ -64,7 +64,8 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="info" @click="deleteThisProduct(scope.row.userName, scope.row.id)">删除</el-button>
+                        <el-button type="danger" @click="downThisProduct(scope.row.id)">下架</el-button>
+                        <el-button type="info" @click="deleteThisProduct(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -85,7 +86,7 @@ import router from "@/router";
 import {FormInstance} from "element-plus";
 import {InitProjectData} from "@/views/Admin_Main/type/Project";
 import {onMounted, reactive, ref, watch} from "vue";
-import {deleteUser, searchProduct} from "@/api/AdminGetData";
+import {deleteProduct, downProduct, searchProduct} from "@/api/AdminGetData";
 import {
     Search
 } from '@element-plus/icons-vue'
@@ -142,9 +143,14 @@ onMounted(() => {
     searchData()
 })
 
-function deleteThisProduct(name : string, id : number) {
-    // deleteProject(name);
-    searchData()
+async function downThisProduct(id: number) {
+    await downProduct(id)
+    await searchData()
+}
+
+async function deleteThisProduct(id: number) {
+    await deleteProduct(id);
+    await searchData()
 }
 </script>
 

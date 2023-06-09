@@ -64,7 +64,8 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="info" @click="deleteThisProject(scope.row.userName, scope.row.id)">删除</el-button>
+                        <el-button type="success" @click="releaseThisProduct(scope.row.id)">发布</el-button>
+                        <el-button type="info" @click="deleteThisProduct(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,13 +84,12 @@
 import {delAdminToken} from "@/api/cookie";
 import router from "@/router";
 import {FormInstance} from "element-plus";
-import {InitProjectData, Product} from "@/views/Admin_Main/type/Project";
+import {InitProjectData} from "@/views/Admin_Main/type/Project";
 import {onMounted, reactive, ref, watch} from "vue";
-import {deleteUser, searchProduct, searchProject} from "@/api/AdminGetData";
+import {deleteProduct, searchAuditProduct, releaseProduct} from "@/api/AdminGetData";
 import {
     Search
 } from '@element-plus/icons-vue'
-import {User} from "@/views/Admin_Main/type/User";
 
 const data = reactive(new InitProjectData())
 
@@ -121,14 +121,13 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 function searchData() {
-    searchProduct(searchForm.value.search, data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
+    searchAuditProduct(searchForm.value.search, data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
         data.list = res.data.records
         data.pageData.page = res.data.current
         data.pageData.count = res.data.total
         data.pageData.pagesize = res.data.size
         console.log(data)
         console.log(res)
-        filterAudit()
     }).catch((err) => {
         console.log("error"+err)
     })
@@ -144,18 +143,14 @@ onMounted(() => {
     searchData()
 })
 
-function deleteThisProject(name : string, id : number) {
-    // deleteProject(name);
-    searchData()
+async function releaseThisProduct(id : number) {
+    await releaseProduct(id)
+    await searchData()
 }
 
-function filterAudit() {
-    let temp: Product[] = []
-    temp = data.list.filter((value) => {
-        return value.state.indexOf("audit") != -1;
-    })
-    data.list = temp
-    data.pageData.count = temp.length
+function deleteThisProduct(id : number) {
+    deleteProduct(id)
+    searchData()
 }
 
 </script>

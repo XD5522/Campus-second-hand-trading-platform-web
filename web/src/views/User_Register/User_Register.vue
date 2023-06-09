@@ -34,9 +34,13 @@
                     <el-form-item label="确认密码" prop="checkpassword">
                         <el-input type="password" v-model="registerForm.checkpassword" placeholder="请再次输入密码"></el-input>
                     </el-form-item>
+                    <el-form-item label="验证码" prop="code">
+                        <el-input v-model="registerForm.code" placeholder="请输入验证码" style="width: 324px"></el-input>
+                        <IdentifyCode :identify-code="identifyCode" @click="refreshCode" style="margin: 0px 20px"></IdentifyCode>
+                    </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="register(registerFormRef)">注册</el-button>
-                        <el-button @click="resetForm(registerFormRef)">重置</el-button>
+                        <el-button type="primary" @click="register(registerFormRef)" style="width: 40%">注册</el-button>
+                        <el-button @click="resetForm(registerFormRef)" style="width: 40%">重置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -45,12 +49,13 @@
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, reactive, ref} from "vue";
+import {defineComponent, onMounted, reactive, ref} from "vue";
 import {FormInstance, FormRules} from "element-plus";
 import {RegisterData} from "@/views/User_Register/type/RegisterData";
 import md5 from "md5";
 import {userRegister} from "@/api/UserRegister";
 import router from "@/router";
+import IdentifyCode from "@/views/User_Register/components/IdentifyCode.vue";
 
 defineComponent({
     name: "User_Register"
@@ -65,10 +70,14 @@ const registerForm = ref<RegisterData>({
     bankCard: '',
     email: '',
     password: '',
-    checkpassword: ''
+    checkpassword: '',
+    code: ''
 })
 
 const registerFormRef = ref<FormInstance>()
+
+const identifyCode = ref();
+const identifyCodes = ref("1234567890abcdefjhijklinopqrsduvwxyz");
 
 const validatePass = (rule: any, value: any, callback: any) => {
     if (value === '') {
@@ -123,6 +132,9 @@ const rules = reactive<FormRules>({
     ],
     checkpassword: [
         { validator: validatePass2, required: true, trigger: 'blur' }
+    ],
+    code : [
+        { required: true, message: '请输入验证码', trigger: 'blur' },
     ]
 })
 
@@ -130,32 +142,42 @@ const register = (formEl: FormInstance | undefined) => {
     if(!formEl) return
     formEl.validate((valid) =>{
         if(valid) {
-            // console.log("注册成功")
-            const md5password = md5(registerForm.value.password)
-            //将待提交表单封装进data
-            const data = {
-                userName: registerForm.value.userName,
-                name: registerForm.value.name,
-                city: registerForm.value.city,
-                phone: registerForm.value.phone,
-                gender: registerForm.value.gender,
-                bankCard: registerForm.value.bankCard,
-                email: registerForm.value.email,
-                password: md5password,
-                checkpassword: ''
-            } as RegisterData
-            //调用@api/register注册
-            userRegister(data).then((res) => {
-                console.log(res)
-                if(res.code == 200) {
-                    alert(res.message)
-                    router.push('/userlogin')
-                }
-                else alert(res.message)
-            })
+            if(identifyCode.value != registerForm.value.code) {
+                alert("请输入正确的验证码")
+                refreshCode()
+            }
+            else {
+                // console.log("注册成功")
+                const md5password = md5(registerForm.value.password)
+                //将待提交表单封装进data
+                const data = {
+                    userName: registerForm.value.userName,
+                    name: registerForm.value.name,
+                    city: registerForm.value.city,
+                    phone: registerForm.value.phone,
+                    gender: registerForm.value.gender,
+                    bankCard: registerForm.value.bankCard,
+                    email: registerForm.value.email,
+                    password: md5password,
+                    checkpassword: ''
+                } as RegisterData
+                //调用@api/register注册
+                userRegister(data).then((res) => {
+                    console.log(res)
+                    if(res.code == 200) {
+                        alert(res.message)
+                        router.push('/userlogin')
+                    }
+                    else {
+                        alert(res.message)
+                        refreshCode()
+                    }
+                })
+            }
         }
         else {
             alert("注册失败")
+            refreshCode()
             return false
         }
     })
@@ -167,6 +189,25 @@ const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
 }
+
+const refreshCode = () => {
+    identifyCode.value = ""
+    makeCode(4)
+}
+
+const makeCode = (len : number) => {
+    for (let i = 0; i < len; i++) {
+        identifyCode.value += identifyCodes.value[randomNum(0, identifyCodes.value.length)];
+    }
+}
+
+const randomNum = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min) + min);
+};
+
+onMounted(() => {
+    refreshCode()
+})
 
 </script>
 
