@@ -34,9 +34,30 @@ export function getOrderListById(id:number,pagesize:number,pagenum:number,state:
                 PageNum : pagenum
             }
         })
-    }else{
-        return null;
-    }
+    }else if(state=="ToBeShipped"){
+        return request({
+            method:"get",
+            url: `/order/SellerGetOrderListByPage&State`,
+            params:{
+                Id : id,
+                PageSize : pagesize,
+                PageNum : pagenum,
+                State : "未发货"
+            }
+        })
+    }else if(state=="ToBeReturned"){
+        return request({
+            method:"get",
+            url: `/order/SellerGetOrderListByPage&State`,
+            params:{
+                Id : id,
+                PageSize : pagesize,
+                PageNum : pagenum,
+                State : "待退货"
+            }
+        })
+    }else return null;
+
 }
 export function GetOrderDetail(order_id:number){
     return request({
@@ -76,4 +97,37 @@ export function ReturnPD(order_id:number){
             order_id:order_id,
         }
     })
+}
+
+export function SellerOperation(order_id:number,state:string){
+    if(state=="shipments"){
+        return request({
+            method:"get",
+            url: `/order/seller`,
+            params:{
+                order_id:order_id,
+                operation:"shipments"
+            }
+        })
+    }
+    else if(state=="AgreeReturn"){
+        return request({
+            method:"get",
+            url: `/order/seller`,
+            params:{
+                order_id:order_id,
+                operation:"AgreeReturn"
+            }
+        })
+    }
+    else if(state=="RefuseReturn"){
+        return request({
+            method:"get",
+            url: `/order/seller`,
+            params:{
+                order_id:order_id,
+                operation:"RefuseReturn"
+            }
+        })
+    }else return null;
 }
