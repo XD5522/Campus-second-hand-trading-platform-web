@@ -126,21 +126,19 @@ const isNoPass = (state : string) => {
 
 }
 
-function passThisUser(userName : string, id : number) {
-    passUser(userName);
-    data.list.forEach((item, i) => {
-        if(item.id == id) {
-            data.list[i].state = "正常"
-        }
+async function passThisUser(userName : string, id : number) {
+    await passUser(userName);
+    await getAuditUser().then((res) => {
+        data.list = res.data
+        data.pageData.count = res.data.length
     })
 }
 
-function noPassThisUser(userName : string, id : number) {
-    noPassUser(userName);
-    data.list.forEach((item, i) => {
-        if(item.id == id) {
-            data.list[i].state = "审核未通过"
-        }
+async function noPassThisUser(userName: string, id: number) {
+    await noPassUser(userName);
+    await getAuditUser().then((res) => {
+        data.list = res.data
+        data.pageData.count = res.data.length
     })
 }
 

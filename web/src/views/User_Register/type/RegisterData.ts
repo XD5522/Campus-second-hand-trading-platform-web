@@ -8,4 +8,5 @@ export interface RegisterData {
     email: string,    // 邮箱
     password: string, // 密码
     checkpassword: string // 确认密码
+    code: string //验证码
 }
