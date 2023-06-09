@@ -64,7 +64,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="info" @click="deleteThisProject(scope.row.userName, scope.row.id)">删除</el-button>
+                        <el-button type="info" @click="deleteThisProduct(scope.row.userName, scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -85,7 +85,7 @@ import router from "@/router";
 import {FormInstance} from "element-plus";
 import {InitProjectData} from "@/views/Admin_Main/type/Project";
 import {onMounted, reactive, ref, watch} from "vue";
-import {deleteUser, searchProject} from "@/api/AdminGetData";
+import {deleteUser, searchProduct} from "@/api/AdminGetData";
 import {
     Search
 } from '@element-plus/icons-vue'
@@ -120,7 +120,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 function searchData() {
-    searchProject(searchForm.value.search, data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
+    searchProduct(searchForm.value.search, data.pageData.order, data.pageData.asc, data.pageData.page, data.pageData.pagesize).then((res) => {
         data.list = res.data.records
         data.pageData.page = res.data.current
         data.pageData.count = res.data.total
@@ -142,7 +142,7 @@ onMounted(() => {
     searchData()
 })
 
-function deleteThisProject(name : string, id : number) {
+function deleteThisProduct(name : string, id : number) {
     // deleteProject(name);
     searchData()
 }

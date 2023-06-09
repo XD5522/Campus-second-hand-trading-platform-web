@@ -14,12 +14,13 @@ export interface SelectData {
     count : number
     pagesize : number
 }
-
 export class InitUserData {
     pageData : SelectData = {
         page : 1,
         count : 0,
         pagesize : 5
     }
+    isShow = false
+    active: User
     list : User[]=[]
 }

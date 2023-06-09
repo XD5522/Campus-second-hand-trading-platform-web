@@ -85,10 +85,10 @@ export function deleteUser(data : string) {
     })
 }
 
-export function searchProject(name : String, order : String, asc : String, current : number, size : number) {
+export function searchProduct(name : String, order : String, asc : String, current : number, size : number) {
     return request({
         method:"get",
-        url: `/admin/searchProject`,
+        url: `/admin/searchProduct`,
         params: {
             name : name,
             current : current,
@@ -108,3 +108,21 @@ export function searchProject(name : String, order : String, asc : String, curre
 //         }
 //     })
 // }
+
+export function edit(data : User) {
+    return request({
+        method: 'post',
+        url: '/admin/edit',
+        data: data
+    })
+}
+
+export function reset(data : string) {
+    return request({
+        method: 'post',
+        url: '/admin/reset',
+        params: {
+            userName: data
+        }
+    })
+}
