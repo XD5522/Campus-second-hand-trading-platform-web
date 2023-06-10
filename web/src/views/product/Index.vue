@@ -40,13 +40,16 @@ import { ElMessageBox } from 'element-plus'
 import {Car} from "@/views/product/type/car";
 import { GetProductComments} from "@/api/Comment";
 import {getUserId} from "@/api/cookie";
+import router from "@/router";
 
 function carFinish(){
     addCar()
     showCar.value=false;
     getProduct()
 }
-
+function pushPro(id:number){
+    router.push({path: '/userZone', query: {id: id}});
+}
 const handleClose = (done: () => void) => {
     ElMessageBox.confirm('Are you sure to close this dialog?')
         .then(() => {
@@ -86,7 +89,6 @@ function addCar(){
 
 
 onMounted(()=>{
-    alert(getUserId())
     car.value.userId=getUserId()
     getProduct()
 })
@@ -208,10 +210,9 @@ function handlePageChange(page:number){
                             />
                         </span>
                     </div>
-                    <span style="color: #666666">——————————————————</span>
+                    <el-divider/>
                     <div >
-                        <el-button type="primary">进店逛逛</el-button>
-                        <el-button type="warning">举报</el-button>
+                        <el-button type="primary" @click="pushPro(product.id)">进店逛逛</el-button>
                     </div>
                 </el-card>
             </div>
