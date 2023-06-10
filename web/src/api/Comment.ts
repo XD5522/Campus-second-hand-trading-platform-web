@@ -63,18 +63,30 @@ export function GetProductComments(id:number,pagesize:number,pagenum:number) {
     })
 }
 
-export function AddCommnets(comment:Comment){
+export function AddCommnets(star:number,content:string,product_id:number,buyer:number){
     return request({
         method:"post",
         url: "/comment/addComment",
-        data: comment
+        params:{
+            star:star,
+            content:content,
+            product_id:product_id,
+            buyer_id:buyer,
+        }
     })
 }
 
-export function AddEvaluate(evaluate:Evaluate){
+export function AddEvaluate(star:number,buyer:number,seller:number,product_id:number,state:string,content:string){
     return request({
         method:"post",
         url: "/comment/addEvaluate",
-        data: evaluate
+        params:{
+            star:star,
+            buyer_id:buyer,
+            seller_id:seller,
+            product_id:product_id,
+            state:state,
+            content:content,
+        }
     })
 }
