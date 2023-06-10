@@ -198,7 +198,7 @@ function GetproudctList(id: number, pageSize: number, pageNum: number) {
 //点击跳转到商品详情页
 function handleCardClick(product: Product) {
   console.log("点击的商品id:" + product.id);
-  //TODO 跳转
+  router.push({path:"/prouduct",query:{id:product.id}})
 }
 
 /*修改个人信息的功能*/
