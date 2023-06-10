@@ -86,6 +86,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {//用户注册界面
+    path: '/merchartregister',
+    name: 'merchartregister',
+    component:()=> import('../views/Merchant_Register/Merchant_Register.vue'),
+    meta: {
+      hideNavbar: true
+    }
+  },
+  {//商家注册界面
     path: '/userregister',
     name: 'userregister',
     component:()=> import('../views/User_Register/User_Register.vue'),

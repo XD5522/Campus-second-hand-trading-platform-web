@@ -8,6 +8,7 @@ export interface RegisterData {
     email: string,    // 邮箱
     password: string, // 密码
     checkpassword: string // 确认密码
-    type: string // 用户类型
+    type: string //用户类型
+    license : string // 营业执照
     code: string //验证码
 }

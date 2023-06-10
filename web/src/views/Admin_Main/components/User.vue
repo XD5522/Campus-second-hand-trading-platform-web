@@ -247,6 +247,7 @@ function resetPassword() {
 }
 
 function editMessage() {
+    console.log(data.active)
     edit(data.active)
     data.isShow = false
 }

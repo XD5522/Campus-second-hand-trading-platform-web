@@ -38,10 +38,6 @@
                                 <el-icon><Goods /></el-icon>
                                 <span>管理商品列表</span>
                             </el-menu-item>
-                            <el-menu-item index="/AdminMain/setting">
-                                <el-icon><Setting /></el-icon>
-                                <span>设置平台交易费用</span>
-                            </el-menu-item>
                         </el-menu>
                     </el-col>
                 </el-row>

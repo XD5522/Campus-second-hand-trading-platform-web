@@ -37,6 +37,7 @@
                 action="http://localhost:8080/user/uploadImg"
                 :on-success="handleSuccess"
                 :before-upload="beforeUpload"
+                :headers="headerObj"
             >
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -60,7 +61,7 @@ import {ElButton, ElFormItem, ElMessage, FormInstance, FormRules} from "element-
 import {User} from "@/views/ChangeUserMsg/type/User";
 import {ChangeUserMsg, GetAllUserMsg} from "@/api/User";
 import {useRouter} from "vue-router";
-import {getUserId} from "@/api/cookie";
+import {getToken, getUserId} from "@/api/cookie";
 
 const changeForm = ref<User>({
   id:0,
@@ -90,6 +91,12 @@ function getAllMsg(){
   }).catch(err=>{
     console.log("error"+err)
   })
+}
+
+/*el-upload上传组件发送请求需要自己设置请求头部*/
+const headerObj = {
+    token: getToken(),
+    type: 'user'
 }
 
 /*更改头像部分*/

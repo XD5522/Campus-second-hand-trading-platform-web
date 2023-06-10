@@ -130,7 +130,7 @@ export function downProduct(data : number) {
         url: '/admin/downProduct',
         params: {
             productId : data,
-            state : 'down'
+            state : 'ban'
         }
     })
 }
@@ -149,7 +149,13 @@ export function edit(data : User) {
     return request({
         method: 'post',
         url: '/admin/edit',
-        data: data
+        params: {
+            id : data.id,
+            userName : data.userName,
+            name : data.name,
+            city : data.city,
+            type : data.type
+        }
     })
 }
 
