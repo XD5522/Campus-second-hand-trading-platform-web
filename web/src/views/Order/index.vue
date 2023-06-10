@@ -114,6 +114,21 @@
             <div style="flex: 1"></div>
           </div>
 
+          <div style="display: flex" v-if="!active_comment">
+            <div style="flex: 1"></div>
+            <div style="flex: 4;">
+              <el-card style="width: 100%;text-align: left">
+                <div>评论商品</div>
+                <el-rate v-model="newComment.star1"></el-rate>
+                <el-input v-model="newComment.content1"/>
+                <div>评论商家</div>
+                <el-rate v-model="newComment.star2"></el-rate>
+                <el-input v-model="newComment.content2"/>
+                <el-button style="margin-top: 10px" type="primary" @click="SubmitComment">提交</el-button>
+              </el-card>
+            </div>
+            <div style="flex: 1"></div>
+          </div>
 
         </div>
       </el-col>
@@ -126,9 +141,10 @@ import {onMounted, ref} from "vue";
 import {getUserId} from "@/api/cookie";
 import {useRouter} from "vue-router";
 import {Comment} from "@/views/Comment/type/Comment";
+import {Evaluate} from "@/views/Order/type/Evaluate";
 import {Detail} from "@/views/Order/type/detail";
 import {CancelOrder, finishOrder, GetOrderDetail, ReturnPD} from "@/api/Order";
-import {GetComment} from "@/api/Comment";
+import {AddCommnets, AddEvaluate, GetComment} from "@/api/Comment";
 import {ElMessage} from "element-plus";
 
 const user_id = ref();
@@ -159,20 +175,19 @@ onMounted(() => {
       if (comment.value.id != null) {
         active_comment.value = true;
       }
-
-      //更新progress
-      if (order.value.state == "已完成") {
-        active.value = 4;
-      } else if (order.value.state == "已发货") {
-        active.value = 3;
-        IsReceived.value = true;
-      } else if (order.value.state == "未发货") {
-        active.value = 2;
-        IsCancel.value = true;
-      }else{
-        active.value =1;
-      }
     })
+    //更新progress
+    if (order.value.state == "已完成") {
+      active.value = 4;
+    } else if (order.value.state == "已发货") {
+      active.value = 3;
+      IsReceived.value = true;
+    } else if (order.value.state == "未发货") {
+      active.value = 2;
+      IsCancel.value = true;
+    }else{
+      active.value =1;
+    }
   })
   IsMounted.value = true;
 })
@@ -200,6 +215,39 @@ function ReturnProduct(){
 
 function GotoProductDetail(){
   r.push({})//TODO 跳转到商品详情
+}
+
+interface NewComment{
+  star1:number,
+  star2:number,
+  content1:string,
+  content2:string
+}
+
+const newComment = ref<NewComment>({
+  star1:5,
+  star2:5,
+  content1:"默认好评",
+  content2:"默认好评"
+})
+
+function SubmitComment(){
+  console.log(newComment.value)
+  const Comment1 = ref<Comment>();
+  Comment1.value.star = newComment.value.star1;
+  Comment1.value.content = newComment.value.content1;
+  Comment1.value.product_id = order.value.product_id;
+  Comment1.value.user_id = order.value.buyer_id;
+  AddCommnets(Comment1.value);
+  const Comment2 = ref<Evaluate>();
+  Comment2.value.commenter = order.value.buyer_id;
+  Comment2.value.commentee = order.value.seller_id;
+  Comment2.value.productId = order.value.product_id;
+  Comment2.value.star = newComment.value.star2;
+  Comment2.value.state = "B";
+  Comment2.value.content = newComment.value.content2;
+  AddEvaluate(Comment2.value);
+  ElMessage.success("评论成功")
 }
 
 </script>
