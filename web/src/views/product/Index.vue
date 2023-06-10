@@ -27,7 +27,7 @@ let product = ref<product>({
     userCount:0
 })
 const route = useRoute()
-const userId = ref(1)
+const userId = ref(getUserId())
 
 
 let car = ref<Car>({
@@ -86,6 +86,8 @@ function addCar(){
 
 
 onMounted(()=>{
+    alert(getUserId())
+    car.value.userId=getUserId()
     getProduct()
 })
 
