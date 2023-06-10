@@ -36,14 +36,14 @@
     <div class="dataForm">
         <el-card style="margin: 20px">
             <el-table
-                :data="dataList.List"
+                :data="data.list"
                 :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}"
                 border
                 style="width: 100%"
             >
                 <el-table-column prop="id" label="ID" width="70px" />
-                <el-table-column prop="userName" label="用户名" width="150px" />
+                <el-table-column prop="userName" label="用户名" width="125px" />
                 <el-table-column prop="name" label="姓名" width="100px" />
                 <el-table-column prop="type" label="用户类型" width="100px" />
                 <el-table-column prop="city" label="城市" width="100px"/>
@@ -61,8 +61,22 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="license" label="营业执照" width="200px">
+                    <template v-slot="scope">
+                        <div>
+                            <el-image
+                                style="width: 100px; height: 100px"
+                                :src="imgpath+scope.row.license"
+                                :preview-src-list="[imgpath+scope.row.license]"
+                                :hide-on-click-modal="true"
+                                :preview-teleported="true"
+                            >
+                            </el-image>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="state" label="状态" width="100px"/>
-                <el-table-column label="操作" width="434px">
+                <el-table-column label="操作" width="243px">
                     <template #default="scope">
                         <el-button type="success" v-if="isAudit(scope.row.state) || isNoPass(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">通过</el-button>
                         <el-button type="danger" v-if="isAudit(scope.row.state)" @click="noPassThisUser(scope.row.userName, scope.row.id)">不通过</el-button>
@@ -93,14 +107,7 @@ import {
 } from '@element-plus/icons-vue'
 
 const data = reactive(new InitUserData())
-const dataList = reactive({
-    List: computed(() => {
-        return data.list.slice(
-            (data.pageData.page - 1) * data.pageData.pagesize,
-            data.pageData.page * data.pageData.pagesize
-        )
-    })
-})
+const imgpath = "http://101.43.208.136:9090/mall"
 
 const searchForm = ref({
     search : ''
@@ -119,6 +126,7 @@ onBeforeMount(() => {
         data.pageData.count = res.data.length
         console.log(data.pageData.count)
         console.log(data.list)
+        filterMerchant()
     })
 })
 
@@ -179,6 +187,7 @@ function searchData() {
     searchAuditUser(searchForm.value.search, data.pageData.page, data.pageData.pagesize).then((res) => {
         data.list = res.data
         data.pageData.count = res.data.length
+        filterMerchant()
     })
 }
 
@@ -187,9 +196,19 @@ watch([() => searchForm.value.search], () => {
         getAuditUser().then((res) => {
             data.list = res.data
             data.pageData.count = res.data.length
+            filterMerchant()
         })
     }
 })
+
+function filterMerchant() {
+    let temp: User[] = []
+    temp = data.list.filter((value) => {
+        return value.type.indexOf("商家") != -1;
+    })
+    data.list = temp
+    console.log(data)
+}
 
 </script>
 

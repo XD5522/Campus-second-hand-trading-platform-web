@@ -6,6 +6,7 @@ export interface User {
     state : string
     city : string
     img : string
+    license : string
 }
 
 export interface SelectData {
@@ -13,12 +14,13 @@ export interface SelectData {
     count : number
     pagesize : number
 }
-
 export class InitUserData {
     pageData : SelectData = {
         page : 1,
         count : 0,
-        pagesize : 10
+        pagesize : 5
     }
+    isShow = false
+    active: User
     list : User[]=[]
 }

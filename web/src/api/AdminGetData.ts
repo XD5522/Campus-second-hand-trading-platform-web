@@ -85,10 +85,10 @@ export function deleteUser(data : string) {
     })
 }
 
-export function searchProject(name : String, order : String, asc : String, current : number, size : number) {
+export function searchProduct(name : String, order : String, asc : String, current : number, size : number) {
     return request({
         method:"get",
-        url: `/admin/searchProject`,
+        url: '/admin/searchProduct',
         params: {
             name : name,
             current : current,
@@ -99,12 +99,66 @@ export function searchProject(name : String, order : String, asc : String, curre
     })
 }
 
-// export function deleteProject(data : String) {
-//     return request({
-//         method: 'post',
-//         url: '/admin/deleteProject',
-//         params: {
-//             name : data
-//         }
-//     })
-// }
+export function searchAuditProduct(name : String, order : String, asc : String, current : number, size : number) {
+    return request({
+        method:"get",
+        url: '/admin/searchAuditProduct',
+        params: {
+            name : name,
+            current : current,
+            order : order,
+            asc : asc,
+            num : size
+        }
+    })
+}
+
+export function releaseProduct(data : number) {
+    return request({
+        method: 'post',
+        url: '/admin/releaseProduct',
+        params: {
+            productId : data,
+            state : 'normal'
+        }
+    })
+}
+
+export function downProduct(data : number) {
+    return request({
+        method: 'post',
+        url: '/admin/downProduct',
+        params: {
+            productId : data,
+            state : 'down'
+        }
+    })
+}
+
+export function deleteProduct(data : number) {
+    return request({
+        method: 'post',
+        url: '/admin/deleteProduct',
+        params: {
+            productId : data
+        }
+    })
+}
+
+export function edit(data : User) {
+    return request({
+        method: 'post',
+        url: '/admin/edit',
+        data: data
+    })
+}
+
+export function reset(data : string) {
+    return request({
+        method: 'post',
+        url: '/admin/reset',
+        params: {
+            userName: data
+        }
+    })
+}

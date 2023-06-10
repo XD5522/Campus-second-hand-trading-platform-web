@@ -11,7 +11,9 @@
                         <el-input type="password" v-model="form.userPassword" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="handleLogin">登录</el-button>
+                        <el-button type="primary" @click="handleLogin" style="width: 30%">登录</el-button>
+                        <el-button @click="handleRegister" style="width: 30%">注册</el-button>
+                        <el-button type="text" @click="registerPassword" style="width: 30%">忘记密码</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -93,6 +95,12 @@ export default defineComponent({
                   alert("请输入用户名和密码");
                 }
             });
+        },
+        handleRegister() {
+            router.push('/userregister')
+        },
+        registerPassword() {
+            alert("这边建议联系管理员给你重置一下密码捏")
         }
     }
 });

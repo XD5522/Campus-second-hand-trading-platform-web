@@ -1,4 +1,6 @@
 import request from "@/api/request";
+import {Comment} from "@/views/Comment/type/Comment";
+import {Evaluate} from "@/views/Order/type/Evaluate";
 
 export function GetCommentPage(id:number,pagesize:number,pagenum:number,state:string){
     if(state=="PD"){
@@ -58,5 +60,21 @@ export function GetProductComments(id:number,pagesize:number,pagenum:number) {
             current : pagesize,
             num : pagenum,
         }
+    })
+}
+
+export function AddCommnets(comment:Comment){
+    return request({
+        method:"post",
+        url: "/comment/addComment",
+        data: comment
+    })
+}
+
+export function AddEvaluate(evaluate:Evaluate){
+    return request({
+        method:"post",
+        url: "/comment/addEvaluate",
+        data: evaluate
     })
 }

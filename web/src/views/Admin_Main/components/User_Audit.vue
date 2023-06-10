@@ -36,7 +36,7 @@
     <div class="dataForm">
         <el-card style="margin: 20px">
             <el-table
-                :data="dataList.List"
+                :data="data.list"
                 :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}"
                 border
@@ -75,7 +75,8 @@
                 @size-change="sizeChange"
                 @current-change="currentChange"
                 layout="prev, pager, next"
-                :total="data.pageData.count">
+                :total="data.pageData.count"
+            >
             </el-pagination>
         </el-card>
     </div>
@@ -93,14 +94,7 @@ import {
 } from '@element-plus/icons-vue'
 
 const data = reactive(new InitUserData())
-const dataList = reactive({
-    List: computed(() => {
-        return data.list.slice(
-            (data.pageData.page - 1) * data.pageData.pagesize,
-            data.pageData.page * data.pageData.pagesize
-        )
-    })
-})
+const imgpath = "http://101.43.208.136:9090/mall"
 
 const searchForm = ref({
     search : ''
@@ -132,21 +126,19 @@ const isNoPass = (state : string) => {
 
 }
 
-function passThisUser(userName : string, id : number) {
-    passUser(userName);
-    data.list.forEach((item, i) => {
-        if(item.id == id) {
-            data.list[i].state = "正常"
-        }
+async function passThisUser(userName : string, id : number) {
+    await passUser(userName);
+    await getAuditUser().then((res) => {
+        data.list = res.data
+        data.pageData.count = res.data.length
     })
 }
 
-function noPassThisUser(userName : string, id : number) {
-    noPassUser(userName);
-    data.list.forEach((item, i) => {
-        if(item.id == id) {
-            data.list[i].state = "审核未通过"
-        }
+async function noPassThisUser(userName: string, id: number) {
+    await noPassUser(userName);
+    await getAuditUser().then((res) => {
+        data.list = res.data
+        data.pageData.count = res.data.length
     })
 }
 

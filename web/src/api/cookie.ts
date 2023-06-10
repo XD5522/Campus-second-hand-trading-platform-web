@@ -7,10 +7,12 @@ export const USER_ID = 'USER_ID'
 
 export const setToken = (token : string, cookieExpires : any) => {
     Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 })
+    delAdminToken()
 }
 
 export const setAdminToken = (token : string, cookieExpires : any) => {
     Cookies.set(TOKEN_ADMIN, token, { expires: cookieExpires || 1 })
+    delToken()
 }
 
 export const setUserId = (userId : any, cookieExpires : any) => {
