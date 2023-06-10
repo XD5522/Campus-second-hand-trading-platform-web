@@ -53,3 +53,28 @@ export function getMoneyRecord(){
 
     })
 }
+interface address{
+    userId:number;
+    name:String;
+    phone:String;
+    address:String;
+}
+
+export function saveAddr(addr:address){
+    return request({
+        method:"post",
+        url: "/user/address",
+        data:addr
+
+    })
+}
+export function deleteAddress(id:number){
+    return request({
+        method:"delete",
+        url: "/user/address",
+        params:{
+            id:id
+        }
+
+    })
+}
