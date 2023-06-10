@@ -1,11 +1,60 @@
 <script lang="ts" setup>
 import Vue, {onMounted, ref} from 'vue';
 import Options from 'vue-class-component';
-import {getmoney, getMoneyRecord, getUser, incomeRecord, payoutRecord, recharge, rechargeRecord} from "@/api/wallet";
+import {
+    deleteAddress,
+    getmoney,
+    getMoneyRecord,
+    getUser,
+    incomeRecord,
+    payoutRecord,
+    recharge,
+    rechargeRecord,
+    saveAddr
+} from "@/api/wallet";
 import {ElMessageBox} from "element-plus";
 import {product} from "@/views/product/type/Product";
 import {useRoute, useRouter} from "vue-router";
-
+import {getUserId} from "@/api/cookie";
+import {getAddress} from "@/api/pay";
+const addAddr =ref(false)
+const manageAddress = ref(false)
+const wallet_address = ref<Address[]>()
+function addAddress(){
+    saveAddr(addr.value).then(res=>{
+        console.log(res)
+    }).catch(err=>{
+        console.log(err)
+    })
+    addAddr.value=false;
+}
+function deleteAddr(id:number){
+    deleteAddress(id).then(res=>{
+        console.log(res)
+        getAddr()
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+const addr = ref<address>({
+    userId:getUserId(),
+    name:"",
+    phone:"",
+    address:"",
+})
+interface Address{
+    id:number;
+    userId:number;
+    name:String;
+    phone:String;
+    address:String;
+}
+interface address{
+    userId:number;
+    name:String;
+    phone:String;
+    address:String;
+}
 interface User{
     id : number;
     userName :String;
@@ -52,7 +101,14 @@ const user = ref<User>({
     score :0,
 });
 
-
+function getAddr(){
+    getAddress().then(res=>{
+        wallet_address.value=res.data
+        console.log(wallet_address.value)
+    }).catch(err=>{
+        console.log(err)
+    })
+}
 const mounted = ref(false)
 
 function getUserWallet(){
@@ -70,6 +126,7 @@ const route = useRoute()
 
 onMounted(()=>{
     getUserWallet()
+    getAddr()
     mounted.value=true;
 })
 const handleClose = (done: () => void) => {
@@ -139,6 +196,10 @@ const num = ref(0.0)
 const getMoney = ref(false)
 const records = ref<Record[]>();
 const type = ref(false)
+function addFin(){
+    addAddr.value = true
+    getAddr()
+}
 </script>
 
 <template>
@@ -157,6 +218,7 @@ const type = ref(false)
                   <el-button type="primary" @click="getMoney=true">
                       提现
                   </el-button>
+                  <el-button type="primary" @click="manageAddress=true">管理地址</el-button>
               </div>
 
               <br/>
@@ -197,6 +259,38 @@ const type = ref(false)
                   <el-button @click="getMon">确定</el-button>
                   <el-button @click="getMoney = false">Cancel</el-button>
           </el-dialog>
+          <div>
+              <el-dialog
+                  v-model="addAddr"
+                  title="充值"
+                  width="30%"
+                  :before-close="handleClose"
+              >
+                  姓名：<el-input v-model="addr.name" placeholder="请输入手机号"></el-input>
+                  手机号：<el-input v-model="addr.phone" placeholder="请输入手机号"></el-input>
+                  地址：<el-input v-model="addr.address" placeholder="请输入地址"></el-input>
+                  <el-button @click="addAddress">确定</el-button>
+              </el-dialog>
+          </div>
+          <div>
+              <el-dialog
+                  v-model="manageAddress"
+                  title="管理地址"
+                  width="50%"
+                  :before-close="handleClose"
+              >
+                  <el-table :data="wallet_address" style="width: 100%">
+                      <el-table-column prop="name" label="姓名" width="180" />
+                      <el-table-column prop="phone" label="手机号" width="180" />
+                      <el-table-column prop="address" label="地址" width="180" />
+                      <el-table-column  label="操作">
+                          <template #default="scope"><el-button type="primary" @click="deleteAddr(scope.row.id)">删除地址</el-button></template>
+                      </el-table-column>
+                  </el-table>
+                  <el-button @click="addFin">添加地址</el-button>
+                  <el-button @click="manageAddress = false">取消</el-button>
+              </el-dialog>
+          </div>
 
       </el-col>
   </div>

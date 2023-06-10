@@ -158,13 +158,14 @@ function saveOrder(){
               <span>收货人信息</span>
               <br/>
               <br/>
-              <div v-for="item in address">
+              <div>
                   收货人姓名
                   <el-select v-model="buyer_name" class="m-2" placeholder="选择收货人" size="large">
                       <el-option
                           :key="item.name"
                           :label="item.name"
                           :value="item.name"
+                          v-for="item in address"
                       />
                   </el-select>
                   收货人地址
@@ -173,6 +174,7 @@ function saveOrder(){
                           :key="item.address"
                           :label="item.address"
                           :value="item.address"
+                          v-for="item in address"
                       />
                   </el-select>
                   收货人手机号
@@ -181,6 +183,7 @@ function saveOrder(){
                           :key="item.phone"
                           :label="item.phone"
                           :value="item.phone"
+                          v-for="item in address"
                       />
                   </el-select>
               </div>
