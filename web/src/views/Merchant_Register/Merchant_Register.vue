@@ -2,8 +2,8 @@
     <div class="register-container">
         <el-card class="register-card" shadow="always">
             <div class="register-form">
-                <h2>用户注册</h2>
-                <el-form ref="registerFormRef" :model="registerForm" :rules="rules" label-width="80px">
+                <h2>商家注册</h2>
+                <el-form ref="registerFormRef" :model="registerForm" :rules="rules" label-width="120px">
                     <el-form-item label="用户名" prop="userName">
                         <el-input v-model="registerForm.userName" placeholder="请输入用户名"></el-input>
                     </el-form-item>
@@ -28,6 +28,18 @@
                     <el-form-item label="电子邮箱" prop="email">
                         <el-input v-model="registerForm.email" placeholder="请输入电子邮箱"></el-input>
                     </el-form-item>
+                    <el-form-item label="上传营业执照" prop="license">
+                        <el-upload
+                            class="upload-demo"
+                            action="http://localhost:8080/user/uploadLicense"
+                            :on-success="handleSuccess"
+                            :before-upload="beforeUpload"
+                            ref="uploadRef"
+                        >
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-form-item>
                     <el-form-item label="密码" prop="password">
                         <el-input type="password" v-model="registerForm.password" placeholder="请输入密码"></el-input>
                     </el-form-item>
@@ -35,13 +47,13 @@
                         <el-input type="password" v-model="registerForm.checkpassword" placeholder="请再次输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="验证码" prop="code">
-                        <el-input v-model="registerForm.code" placeholder="请输入验证码" style="width: 324px"></el-input>
+                        <el-input v-model="registerForm.code" placeholder="请输入验证码" style="width: 284px"></el-input>
                         <IdentifyCode :identify-code="identifyCode" @click="refreshCode" style="margin: 0px 20px"></IdentifyCode>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="register(registerFormRef)" style="width: 30%">注册</el-button>
                         <el-button @click="resetForm(registerFormRef)" style="width: 30%">重置</el-button>
-                        <el-button type="text" @click="runMerchantRegister" style="width: 30%">商家注册</el-button>
+                        <el-button type="text" @click="runUserRegister" style="width: 30%">用户注册</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -51,16 +63,16 @@
 
 <script lang="ts" setup>
 import {defineComponent, onMounted, reactive, ref} from "vue";
-import {ElMessage, FormInstance, FormRules} from "element-plus";
-import {RegisterData} from "@/views/User_Register/type/RegisterData";
+import {ElMessage, FormInstance, FormRules, UploadInstance} from "element-plus";
+import {RegisterData} from "@/views/Merchant_Register/type/RegisterData";
 import md5 from "md5";
 import {userRegister} from "@/api/UserRegister";
 import router from "@/router";
 import IdentifyCode from "@/views/User_Register/components/IdentifyCode.vue";
-import Merchant_Register from "@/views/Merchant_Register/Merchant_Register.vue";
+import {getToken} from "@/api/cookie";
 
 defineComponent({
-    name: "User_Register"
+    name: "Merchant_Register"
 });
 
 const registerForm = ref<RegisterData>({
@@ -74,10 +86,12 @@ const registerForm = ref<RegisterData>({
     password: '',
     checkpassword: '',
     type: '',
+    license: '',
     code: ''
 })
 
 const registerFormRef = ref<FormInstance>()
+const uploadRef = ref<UploadInstance>()
 
 const identifyCode = ref();
 const identifyCodes = ref("1234567890abcdefjhijklinopqrsduvwxyz");
@@ -102,6 +116,15 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
         callback()
     }
 }
+
+const validateLicense = (rule: any, value: any, callback: any) => {
+    if (value == '') {
+        callback(new Error('请上传营业执照'))
+    } else {
+        callback()
+    }
+}
+
 
 const rules = reactive<FormRules>({
     userName: [
@@ -129,6 +152,9 @@ const rules = reactive<FormRules>({
     email: [
         { required: true, message: '请输入电子邮箱', trigger: 'blur' },
         { type: 'email', message: '请输入正确的电子邮件格式', trigger: ['blur', 'change'] }
+    ],
+    license: [
+        { required: true, validator: validateLicense, trigger: 'change' },
     ],
     password: [
         { validator: validatePass, required: true, trigger: 'blur' }
@@ -162,10 +188,11 @@ const register = (formEl: FormInstance | undefined) => {
                     bankCard: registerForm.value.bankCard,
                     email: registerForm.value.email,
                     password: md5password,
-                    checkpassword: '',
-                    type: '普通用户'
+                    type: '商家',
+                    license: registerForm.value.license,
+                    checkpassword: ''
                 } as RegisterData
-                //调用@api/register注册
+                // 调用@api/register注册
                 userRegister(data).then((res) => {
                     console.log(res)
                     if(res.code == 200) {
@@ -196,8 +223,8 @@ const register = (formEl: FormInstance | undefined) => {
 // 重置表单
 // 参数formEL只能是FormInstance类型或者undefined
 const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return
     formEl.resetFields()
+    // uploadRef.value.clearFiles()
 }
 
 const refreshCode = () => {
@@ -219,8 +246,26 @@ onMounted(() => {
     refreshCode()
 })
 
-function runMerchantRegister() {
-    router.push('/merchartregister')
+function runUserRegister() {
+    router.push('/userregister')
+}
+
+const handleSuccess = (response: any) => {
+    registerForm.value.license = response.data
+};
+
+const beforeUpload = (file: File) => {
+    const isJPGorPNG = file.type === 'image/jpeg' || file.type === 'image/png'
+    const isLt500K = file.size / 1024 < 500
+
+    if (!isJPGorPNG) {
+        // 使用你自己的消息提示库，例如 Element Plus 的 ElMessage
+        ElMessage.error('只能上传 JPG/PNG 格式的图片')
+    }
+    if (!isLt500K) {
+        ElMessage.error('上传图片大小不能超过 500KB')
+    }
+    return isJPGorPNG && isLt500K
 }
 
 </script>
@@ -239,5 +284,12 @@ function runMerchantRegister() {
 
 .register-form {
     padding: 20px;
+}
+
+.upload-demo {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
 }
 </style>

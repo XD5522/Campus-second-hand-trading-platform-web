@@ -24,7 +24,7 @@
 <script lang="ts">
 import md5 from 'md5';
 import {defineComponent, reactive} from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElCard } from 'element-plus';
+import {ElForm, ElFormItem, ElInput, ElButton, ElCard, ElMessage} from 'element-plus';
 import {getUserId, login} from "@/api/userlogin";
 import router from "@/router";
 import {getToken, setToken, setUserId} from "@/api/cookie";
@@ -84,15 +84,26 @@ export default defineComponent({
                             console.log(getToken())
                             const userId = await getUserId(token)
                             setUserId(userId.data, 1)
+                            ElMessage({
+                                type: 'success',
+                                message: '登陆成功',
+                            })
                             await router.push('/')
                         } else {
-                            alert("用户名或密码错误");
+                            console.log(res)
+                            ElMessage({
+                                type: 'error',
+                                message: res.message,
+                            })
                         }
 
                     })
                 }
                 else{
-                  alert("请输入用户名和密码");
+                  ElMessage({
+                      type: 'info',
+                      message: '请输入用户名和密码'
+                  })
                 }
             });
         },
