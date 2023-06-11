@@ -76,7 +76,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="state" label="状态" width="100px"/>
-                <el-table-column label="操作" width="243px">
+                <el-table-column label="操作" >
                     <template #default="scope">
                         <el-button type="success" v-if="isAudit(scope.row.state) || isNoPass(scope.row.state)" @click="passThisUser(scope.row.userName, scope.row.id)">通过</el-button>
                         <el-button type="danger" v-if="isAudit(scope.row.state)" @click="noPassThisUser(scope.row.userName, scope.row.id)">不通过</el-button>
@@ -97,7 +97,7 @@
 
 <script lang="ts" setup>
 import {computed, onBeforeMount, reactive, ref, watch} from "vue";
-import {deleteUser, getAuditUser, noPassUser, passUser, searchAuditUser} from "@/api/AdminGetData";
+import {deleteUser, getAuditMerchant, noPassUser, passUser, searchAuditUser} from "@/api/AdminGetData";
 import {InitUserData, User} from "@/views/Admin_Main/type/User"
 import {FormInstance} from "element-plus";
 import {delAdminToken} from "@/api/cookie";
@@ -121,7 +121,7 @@ function LoginOut() {
 }
 
 onBeforeMount(() => {
-    getAuditUser().then((res) => {
+    getAuditMerchant().then((res) => {
         data.list = res.data
         data.pageData.count = res.data.length
         console.log(data.pageData.count)
@@ -193,7 +193,7 @@ function searchData() {
 
 watch([() => searchForm.value.search], () => {
     if(searchForm.value.search == '') {
-        getAuditUser().then((res) => {
+        getAuditMerchant().then((res) => {
             data.list = res.data
             data.pageData.count = res.data.length
             filterMerchant()

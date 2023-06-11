@@ -21,6 +21,16 @@ export function getAuditUser() {
     })
 }
 
+/**
+ *  获取待审核的用户信息
+ */
+export function getAuditMerchant() {
+    return request({
+        url: '/admin/getAuditMerchantData',
+        method: 'get'
+    })
+}
+
 export function searchUser(searchText : string, page : number, pageSize : number) {
     return request({
         url: '/admin/searchUser',
