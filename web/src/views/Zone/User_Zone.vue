@@ -198,7 +198,7 @@ function GetproudctList(id: number, pageSize: number, pageNum: number) {
 //点击跳转到商品详情页
 function handleCardClick(product: Product) {
   console.log("点击的商品id:" + product.id);
-  //TODO 跳转
+  router.push({path:"/prouduct",query:{id:product.id}})
 }
 
 /*修改个人信息的功能*/
@@ -213,7 +213,7 @@ const visible = ref(false)
 //定义商品表
 const product_form = ref<NewProduct>({
   img: '',
-  user_id: 1,
+  user_id: 0,
   user_name: '张三',
   name: '',
   intro: '',
@@ -263,6 +263,7 @@ function Show_AddNewProductForm() {
 }
 
 function SubmitNewProduct() {
+  product_form.value.user_id = user_id.value
   AddNewProduct(product_form.value).then(res => {
     if (res.code == 200) {
       visible.value = false;

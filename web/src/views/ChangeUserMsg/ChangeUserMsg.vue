@@ -101,6 +101,7 @@ const headerObj = {
 
 /*更改头像部分*/
 const handleSuccess = (response: any) => {
+  console.log(response.data)
   changeForm.value.img=response.data;
 };
 

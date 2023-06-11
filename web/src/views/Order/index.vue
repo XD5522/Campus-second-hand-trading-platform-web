@@ -139,7 +139,7 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import {getUserId} from "@/api/cookie";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Comment} from "@/views/Comment/type/Comment";
 import {Evaluate} from "@/views/Order/type/Evaluate";
 import {Detail} from "@/views/Order/type/detail";
@@ -162,7 +162,8 @@ const imgpath = ref("http://101.43.208.136:9090/mall")
 const order = ref<Detail>()
 onMounted(() => {
   user_id.value = getUserId();
-  order_id.value = parseInt(r.currentRoute.value.query.id, 10)
+  order_id.value = parseInt(useRoute().query.id, 10)
+  console.log(order_id.value)
   if (user_id.value == -1 || order_id.value == -1) {
     useRouter().push({path: '/userlogin'})
   }
@@ -179,74 +180,67 @@ onMounted(() => {
     //更新progress
     if (order.value.state == "已完成") {
       active.value = 4;
+      IsReturn.value = true;
     } else if (order.value.state == "已发货") {
       active.value = 3;
       IsReceived.value = true;
     } else if (order.value.state == "未发货") {
       active.value = 2;
       IsCancel.value = true;
-    }else{
-      active.value =1;
+    } else {
+      active.value = 1;
     }
   })
   IsMounted.value = true;
 })
 
-function ReceivedProduct(){
-  finishOrder(order.value.id).then(res=>{
+function ReceivedProduct() {
+  finishOrder(order.value.id).then(res => {
     ElMessage.success("收货成功")
     IsReceived.value = false;
   })
 }
 
-function CancelOD(){
-  CancelOrder(order.value.id).then(res=>{
+function CancelOD() {
+  CancelOrder(order.value.id).then(res => {
     ElMessage.success("取消成功")
     IsCancel.value = false;
   })
 }
 
-function ReturnProduct(){
-  ReturnPD(order.value.id).then(res=>{
+function ReturnProduct() {
+  ReturnPD(order.value.id).then(res => {
     ElMessage.success("退货成功")
     IsReturn.value = false;
   })
 }
 
-function GotoProductDetail(){
-  r.push({})//TODO 跳转到商品详情
+function GotoProductDetail() {
+  r.push({path: "/product", query: {id: order.value.product_id}})
 }
 
-interface NewComment{
-  star1:number,
-  star2:number,
-  content1:string,
-  content2:string
+interface NewComment {
+  star1: number,
+  star2: number,
+  content1: string,
+  content2: string
 }
 
 const newComment = ref<NewComment>({
-  star1:5,
-  star2:5,
-  content1:"默认好评",
-  content2:"默认好评"
+  star1: 5,
+  star2: 5,
+  content1: "默认好评",
+  content2: "默认好评"
 })
 
-function SubmitComment(){
-  console.log(newComment.value)
-  const Comment1 = ref<Comment>();
-  Comment1.value.star = newComment.value.star1;
-  Comment1.value.content = newComment.value.content1;
-  Comment1.value.product_id = order.value.product_id;
-  Comment1.value.user_id = order.value.buyer_id;
-  AddCommnets(Comment1.value);
-  const Comment2 = ref<Evaluate>();
-  Comment2.value.commenter = order.value.buyer_id;
-  Comment2.value.commentee = order.value.seller_id;
-  Comment2.value.productId = order.value.product_id;
-  Comment2.value.star = newComment.value.star2;
-  Comment2.value.state = "B";
-  Comment2.value.content = newComment.value.content2;
-  AddEvaluate(Comment2.value);
+function SubmitComment() {
+  AddCommnets(newComment.value.star1,newComment.value.content1,order.value.product_id,order.value.buyer_id).then(res => {
+    console.log(res)
+  })
+
+  AddEvaluate(newComment.value.star2,order.value.buyer_id,order.value.seller_id,order.value.product_id,"B",newComment.value.content2).then(res => {
+    console.log(res)
+  })
   ElMessage.success("评论成功")
 }
 
