@@ -213,7 +213,7 @@ const visible = ref(false)
 //定义商品表
 const product_form = ref<NewProduct>({
   img: '',
-  user_id: 1,
+  user_id: 0,
   user_name: '张三',
   name: '',
   intro: '',
@@ -263,6 +263,7 @@ function Show_AddNewProductForm() {
 }
 
 function SubmitNewProduct() {
+  product_form.value.user_id = user_id.value
   AddNewProduct(product_form.value).then(res => {
     if (res.code == 200) {
       visible.value = false;

@@ -56,6 +56,7 @@ import { PropType, defineProps, defineEmits, ref } from 'vue'
 import {ElForm, ElFormItem, ElInput, ElButton, ElMessage} from 'element-plus';
 import {NewProduct} from "@/views/Zone/type/NewProduct";
 const handleSuccess = (response: any) => {
+  console.log(response.data)
     product_form.value.img=response.data;
 };
 

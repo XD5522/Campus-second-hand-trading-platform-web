@@ -180,6 +180,7 @@ onMounted(() => {
     //更新progress
     if (order.value.state == "已完成") {
       active.value = 4;
+      IsReturn.value = true;
     } else if (order.value.state == "已发货") {
       active.value = 3;
       IsReceived.value = true;
