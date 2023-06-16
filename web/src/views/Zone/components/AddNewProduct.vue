@@ -17,6 +17,7 @@
                             action="http://localhost:8080/user/uploadImg"
                             :on-success="handleSuccess"
                             :before-upload="beforeUpload"
+                            :headers="headerObj"
                         >
                             <el-button size="small" type="primary">点击上传</el-button>
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -55,6 +56,7 @@
 import { PropType, defineProps, defineEmits, ref } from 'vue'
 import {ElForm, ElFormItem, ElInput, ElButton, ElMessage} from 'element-plus';
 import {NewProduct} from "@/views/Zone/type/NewProduct";
+import {getToken} from "@/api/cookie";
 const handleSuccess = (response: any) => {
   console.log(response.data)
     product_form.value.img=response.data;
@@ -124,6 +126,12 @@ const rule = {
 }
 function submitForm(this: any){
     emits('AddProduct');
+}
+
+/*el-upload上传组件发送请求需要自己设置请求头部*/
+const headerObj = {
+    token: getToken(),
+    type: 'user'
 }
 
 //定义关闭模态框的方法
