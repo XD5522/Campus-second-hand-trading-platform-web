@@ -212,7 +212,7 @@ function handlePageChange(page:number){
                     </div>
                     <el-divider/>
                     <div >
-                        <el-button type="primary" @click="pushPro(product.id)">进店逛逛</el-button>
+                        <el-button type="primary" @click="pushPro(product.userId)">进店逛逛</el-button>
                     </div>
                 </el-card>
             </div>
